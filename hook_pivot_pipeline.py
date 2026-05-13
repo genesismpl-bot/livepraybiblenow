@@ -96,6 +96,7 @@ def load_config(path: Path, no_hook: bool = False) -> dict[str, Any]:
     captions.setdefault("mode", "sentence")          # sentence | word
     captions.setdefault("font_size", 84)
     captions.setdefault("margin_v", 0)
+    captions.setdefault("alignment", 5)              # ASS numpad: 5=mid-center, 2=bot-center, 8=top-center
     captions.setdefault("colour", "#FFFFFF")
     captions.setdefault("emphasis_colour", "#FFD700")  # *word* highlight
     captions.setdefault("chunk_size", 4)             # only used in word mode
@@ -104,6 +105,8 @@ def load_config(path: Path, no_hook: bool = False) -> dict[str, Any]:
     cta.setdefault("text", "")
     cta.setdefault("duration", 1.5)
     cta.setdefault("fade_in", 0.4)
+    cta.setdefault("y_frac", 0.45)  # vertical centre as fraction of frame height
+    cta.setdefault("font_size", 64)
 
     return cfg
 
@@ -327,6 +330,7 @@ def make_captions(words: list[dict], cfg: dict, work: Path) -> Path:
             str(out),
             font_size=cap["font_size"],
             margin_v=cap["margin_v"],
+            alignment=cap["alignment"],
             primary_colour=colour,
             emphasis_colour=emphasis,
         )
@@ -386,16 +390,18 @@ def build_payload(
             f"if(lt(t,{cta_start + cta_fade:.3f}),"
             f"(t-{cta_start:.3f})/{cta_fade:.3f},1))'"
         )
+        cta_font_size = int(cta.get("font_size", 64))
+        cta_y_frac = float(cta.get("y_frac", 0.45))
         common = (
-            ":fontsize=64:fontcolor=white"
+            f":fontsize={cta_font_size}:fontcolor=white"
             ":bordercolor=black:borderw=5"
             ":x=(w-text_w)/2"
         )
         line1_filter = (
-            f",drawtext=text='{esc(line1)}'{common}:y=h*0.45-text_h/2{alpha}"
+            f",drawtext=text='{esc(line1)}'{common}:y=h*{cta_y_frac:.3f}-text_h/2{alpha}"
         )
         line2_filter = (
-            f",drawtext=text='{esc(line2)}'{common}:y=h*0.45+text_h/2+10{alpha}"
+            f",drawtext=text='{esc(line2)}'{common}:y=h*{cta_y_frac:.3f}+text_h/2+10{alpha}"
             if line2 else ""
         )
         drawtext = line1_filter + line2_filter

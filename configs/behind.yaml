@@ -26,8 +26,18 @@ script: |
   Abraham had his son at *one hundred*.
   God's timing isn't *late*. It's *exact*.
 
-# Hopeful sunrise backdrop matches the theme.
-still_path: assets/stills/sunrise_ridge.png
+# Backdrop: Gemini-generated Catholic-themed still (3 variants — pick best).
+# To use a fixed backdrop instead, set still_path: assets/stills/<file>.png
+# and comment out the scene block below.
+scene: |
+  Vertical 9:16 cinematic still, 1080x1920. Ornate Catholic golden
+  crucifix on a dark polished wooden altar, soft warm rays of divine
+  light streaming from the upper frame casting glowing highlights on
+  the cross, faint dust particles visible in the light, deep shadowed
+  cathedral interior in the background fading to black, hint of
+  stained glass colour in the far distance. Reverent sacred minimal
+  aesthetic, phone-camera grain, NO people, NO phones, NO text
+  overlays.
 
 # Slow Ken-Burns zoom across the payload duration.
 motion:
@@ -36,30 +46,38 @@ motion:
   duration: 12.0
 
 # ── Voice ────────────────────────────────────────────────────────────
-# Reuses the ElevenLabs voice from the MMO `stop_doomscrolling_real_cost`
-# variant. Swap voice_id when a faith-specific voice is chosen.
+# Dallin — middle-aged American male, "Calming, Deep, Warm. Perfect
+# for stories." (ElevenLabs ID alFofuDn3cOwyoz1i44T)
 voice:
-  voice_id:   "nzFihrBIvB34imQBuxub"
-  stability:  0.40
+  voice_id:   "alFofuDn3cOwyoz1i44T"
+  stability:  0.50
   similarity: 0.80
-  style:      0.55
+  style:      0.35
   apply_phone_mic_filter: false
 
 # ── Captions: sentence-mode with gold emphasis on *marked* words ─────
+# Lower-third positioning so text doesn't compete with center-frame imagery
+# (cross / focal point). ASS alignment 2 = bottom-center; margin_v is the
+# distance from the bottom edge of the frame to the bottom of the text.
 captions:
   style:           source_match
   mode:            sentence
   font_size:       84
-  margin_v:        0
+  margin_v:        280
+  alignment:       2
   colour:          "#FFFFFF"
   emphasis_colour: "#FFD700"
   chunk_size:      4
 
 # ── End-card CTA ─────────────────────────────────────────────────────
+# y_frac places the CTA in the lower-third (same zone as the captions, but
+# the captions are gone by the time the CTA fades in).
 cta:
   text:     "Follow @livepraybible for daily verses"
   duration: 1.5
   fade_in:  0.4
+  y_frac:   0.78
+  font_size: 64
 
 # ── Generation knobs ─────────────────────────────────────────────────
 variants:   3

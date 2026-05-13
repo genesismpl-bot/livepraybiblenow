@@ -175,6 +175,7 @@ def generate_sentence_match_captions(
     output_path: str,
     font_size: int = 84,
     margin_v: int = 0,
+    alignment: int = 5,
     primary_colour: str = "&H00FFFFFF",
     emphasis_colour: str | None = None,
 ) -> str:
@@ -191,7 +192,7 @@ def generate_sentence_match_captions(
     style = (
         f"Style: SrcMatch,-apple-system,{font_size},"
         f"{primary_colour},{primary_colour},&H00000000,&H00000000,"
-        f"1,0,0,0,100,100,0,0,1,5,0,5,80,80,{margin_v},1"
+        f"1,0,0,0,100,100,0,0,1,5,0,{alignment},80,80,{margin_v},1"
     )
     ass_header = f"""[Script Info]
 ScriptType: v4.00+
