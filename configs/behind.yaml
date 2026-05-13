@@ -20,11 +20,11 @@ hook:
 script: |
   Stop *doomscrolling*.
   Have you *prayed* today?
-  You think you're *behind* in life?
-  Joseph was *thirty* before his dream came true.
-  Moses was *eighty* when God called him.
+  Feel like you're *behind* in life?
+  Joseph was *thirty* when his dream came true.
+  Moses was *eighty* when God *called* him.
   Abraham had his son at *one hundred*.
-  God's timing isn't *late* — it's *exact*.
+  God's timing isn't *late*. It's *exact*.
 
 # Hopeful sunrise backdrop matches the theme.
 still_path: assets/stills/sunrise_ridge.png
