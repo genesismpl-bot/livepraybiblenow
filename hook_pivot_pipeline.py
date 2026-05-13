@@ -65,11 +65,16 @@ FPS = 30
 # Config
 # ──────────────────────────────────────────────────────────────────────
 
-def load_config(path: Path) -> dict[str, Any]:
+def load_config(path: Path, no_hook: bool = False) -> dict[str, Any]:
     cfg = yaml.safe_load(path.read_text())
-    for required in ("slug", "hook", "script", "scene"):
-        if required not in cfg:
-            raise ValueError(f"config missing required field: {required}")
+    required = ["slug", "script"]
+    if not no_hook:
+        required.append("hook")
+    if "still_path" not in cfg:
+        required.append("scene")
+    for field in required:
+        if field not in cfg:
+            raise ValueError(f"config missing required field: {field}")
 
     cfg.setdefault("variants", 3)
     cfg.setdefault("output_dir", f"output/hook_pivot_{cfg['slug']}")
@@ -455,9 +460,10 @@ def main():
     ap.add_argument("--skip-image", action="store_true", help="reuse existing variants")
     ap.add_argument("--skip-voice", action="store_true", help="reuse existing voice.mp3")
     ap.add_argument("--skip-hook",  action="store_true", help="reuse existing hook.mp4")
+    ap.add_argument("--no-hook",    action="store_true", help="skip Segment 1 entirely; payload.mp4 becomes the final output")
     args = ap.parse_args()
 
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, no_hook=args.no_hook)
     if args.variants:
         cfg["variants"] = args.variants
 
@@ -466,9 +472,13 @@ def main():
     shutil.copy(args.config, work / "config.yaml")
     print(f"\n=== hook_pivot_pipeline → {work} ===\n")
 
-    # 1. trim hook
-    print("[1/7] Trim hook from source MP4")
-    hook = trim_hook(cfg, work) if not args.skip_hook else (work / "hook.mp4")
+    # 1. trim hook (skipped entirely under --no-hook)
+    if args.no_hook:
+        print("[1/7] Trim hook from source MP4 — SKIPPED (--no-hook)")
+        hook = None
+    else:
+        print("[1/7] Trim hook from source MP4")
+        hook = trim_hook(cfg, work) if not args.skip_hook else (work / "hook.mp4")
     print()
 
     # 2. variants (or explicit still_path override)
@@ -510,9 +520,13 @@ def main():
     payload = build_payload(still_motion, captions, audio, cfg, work)
     print()
 
-    # 7. concat
-    print("[7/7] Concat hook + payload")
-    final = concat(hook, payload, work)
+    # 7. concat (skipped under --no-hook — payload IS the final)
+    if args.no_hook:
+        print("[7/7] Concat hook + payload — SKIPPED (--no-hook)")
+        final = payload
+    else:
+        print("[7/7] Concat hook + payload")
+        final = concat(hook, payload, work)
     print(f"\n✓ DONE → {final}")
     print(f"  total: {get_duration(str(final)):.2f}s\n")
 
