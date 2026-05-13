@@ -16,7 +16,10 @@ hook:
   end:   12.0
 
 # ── Segment 2: bible payload ─────────────────────────────────────────
+# Opener A (softer question) + script #9 "Behind" body.
 script: |
+  Stop *doomscrolling*.
+  Have you *prayed* today?
   You think you're *behind* in life?
   Joseph was *thirty* before his dream came true.
   Moses was *eighty* when God called him.

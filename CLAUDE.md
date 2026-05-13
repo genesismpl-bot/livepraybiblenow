@@ -85,7 +85,7 @@ the format. Useful files there:
 | CTA handle | `@livepraybible` (NOT `@livepraybiblenow` — repo name differs) |
 | Code relationship to MMO framework | Import / vendor — don't fork, don't depend on Drive path |
 | Segment 2 content source | **Scripture API** (specific provider TBD) |
-| Brand opener for Segment 2 | TBD — being prototyped. Pattern: `Stop *doomscrolling*. / Have you *prayed* today?` (or similar) before the script body |
+| Brand opener for Segment 2 | Locked. Every script starts with `Stop *doomscrolling*.` + one of three pivots (random distribution): A `Have you *prayed* today?` / B `When's the last time you *prayed*?` / C `Talk to *God* instead.` See `scripts/segment2_shortlist_v1.md`. |
 
 ## Open items
 

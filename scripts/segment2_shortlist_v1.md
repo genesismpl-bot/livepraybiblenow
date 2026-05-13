@@ -1,87 +1,128 @@
 # Segment 2 — Script Shortlist v1
 
-First batch of 10 Segment 2 scripts (~12s spoken each). `*word*` markers
-become gold-highlighted caption emphasis in the rendered video; they are
-stripped before being sent to ElevenLabs.
+First batch of 10 Segment 2 scripts (~14–15s spoken each after opener).
+`*word*` markers become gold-highlighted caption emphasis in the
+rendered video; they are stripped before being sent to ElevenLabs.
 
 The **top 3** picks are listed at the end with rationale.
 
+## Brand opener
+
+Every Segment 2 script opens with one of three locked-in opener
+variants (the "Stop doomscrolling" pattern interrupt is the brand
+signature). Distribution across the 10 scripts below is random:
+
+- **Opener A** (4× — softer question)
+  ```
+  Stop *doomscrolling*.
+  Have you *prayed* today?
+  ```
+- **Opener B** (3× — sharper, accusing)
+  ```
+  Stop *doomscrolling*.
+  When's the last time you *prayed*?
+  ```
+- **Opener C** (3× — command)
+  ```
+  Stop *doomscrolling*.
+  Talk to *God* instead.
+  ```
+
 ---
 
-## 1. The Storm
+## 1. The Storm — Opener B
 
+Stop *doomscrolling*.
+When's the last time you *prayed*?
 Stop praying for the storm to *pass*.
 Start praying for *strength* to walk through it.
 Every battle you face? God already *knows the outcome*.
 He didn't bring you this *far* to drop you *now*.
 What if today is the day He *answers*?
 
-## 2. Counted
+## 2. Counted — Opener A
 
+Stop *doomscrolling*.
+Have you *prayed* today?
 You think God *forgot* you?
 He counted every *hair* on your head.
 Every tear you've cried — He *caught* it.
 Every prayer you whispered — He *heard* it.
 You are not *invisible*. You are *His*.
 
-## 3. Chasing
+## 3. Chasing — Opener C
 
+Stop *doomscrolling*.
+Talk to *God* instead.
 Stop *chasing*.
 The world will never *fill you*.
 That promotion. That *relationship*. That *applause*.
 None of it will *complete* you.
 Only the One who *made* you can *finish* you.
 
-## 4. Be Still
+## 4. Be Still — Opener A
 
+Stop *doomscrolling*.
+Have you *prayed* today?
 One verse can change your *entire day*.
 "Be *still*, and know that I am *God*."
 Read it slowly. Read it *again*.
 The same God who parted *seas* is fighting for *you*.
 What are you still *worried* about?
 
-## 5. Five Minutes
+## 5. Five Minutes — Opener B
 
+Stop *doomscrolling*.
+When's the last time you *prayed*?
 You don't need more *time*.
 You need more *faith*.
 Five minutes with God beats five *hours* of scrolling.
 He's not asking for *perfection* — He's asking for *presence*.
 Will you give Him *today*?
 
-## 6. Too Far Gone
+## 6. Too Far Gone — Opener C
 
+Stop *doomscrolling*.
+Talk to *God* instead.
 The devil whispers: "you're *too far gone*."
 God says: "you're *exactly* who I came for."
 Your past doesn't *disqualify* you.
 Your scars are *proof* He's still *writing* your story.
 Don't put the pen *down*.
 
-## 7. Peace in a Feed
+## 7. Peace in a Feed — Opener A
 
-Stop scrolling for *peace*.
-You won't find it in a *feed*.
+Stop *doomscrolling*.
+Have you *prayed* today?
+You won't find peace in a *feed*.
 Real peace isn't *posted* — it's *promised*.
 "Peace I leave with you. My peace I *give* to you."
 Close the app. Open the *Bible*.
 
-## 8. Three Words
+## 8. Three Words — Opener C
 
+Stop *doomscrolling*.
+Talk to *God* instead.
 Pray *small*. Pray *now*.
 "God, I need you."
 Three words. That's the *whole* prayer.
 He's not waiting for *eloquent* — He's waiting for *honest*.
 What's stopping you from saying it *right now*?
 
-## 9. Behind
+## 9. Behind — Opener A
 
+Stop *doomscrolling*.
+Have you *prayed* today?
 You think you're *behind* in life?
 Joseph was *thirty* before his dream came true.
 Moses was *eighty* when God called him.
 Abraham had his son at *one hundred*.
 God's timing isn't *late* — it's *exact*.
 
-## 10. Testimony
+## 10. Testimony — Opener B
 
+Stop *doomscrolling*.
+When's the last time you *prayed*?
 What if today's *struggle* is tomorrow's *testimony*?
 What if the thing *breaking* you is the thing *building* you?
 God doesn't *waste* pain.
