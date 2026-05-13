@@ -79,6 +79,15 @@ cta:
   y_frac:   0.78
   font_size: 64
 
+# ── Music bed ────────────────────────────────────────────────────────
+# Soft Gregorian chant underneath the VO. Volume 0.15 ≈ -16 dB —
+# clearly audible but not competing with the voice.
+music:
+  path:     "assets/music/gregorian_chant.mp3"
+  volume:   0.15
+  fade_in:  1.0
+  fade_out: 1.5
+
 # ── Generation knobs ─────────────────────────────────────────────────
 variants:   3
 output_dir: output/behind

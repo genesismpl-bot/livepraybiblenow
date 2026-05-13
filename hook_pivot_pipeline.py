@@ -108,6 +108,12 @@ def load_config(path: Path, no_hook: bool = False) -> dict[str, Any]:
     cta.setdefault("y_frac", 0.45)  # vertical centre as fraction of frame height
     cta.setdefault("font_size", 64)
 
+    music = cfg.setdefault("music", {})
+    music.setdefault("path", None)        # set to a file to enable music bed
+    music.setdefault("volume", 0.15)      # 0.0 = silent, 1.0 = full
+    music.setdefault("fade_in", 1.0)      # seconds
+    music.setdefault("fade_out", 1.5)     # seconds before end of video
+
     return cfg
 
 
@@ -410,6 +416,47 @@ def build_payload(
 
     # loudnorm brings VO to TikTok/Reels target loudness (-14 LUFS) so it
     # doesn't get drowned by the loud auto-captioned hook segment.
+    music_cfg = cfg.get("music", {}) or {}
+    music_path = music_cfg.get("path")
+    if music_path:
+        music_path = Path(music_path)
+        if not music_path.is_absolute():
+            music_path = ROOT / music_path
+        if not music_path.exists():
+            raise FileNotFoundError(f"music.path not found: {music_path}")
+
+    if music_path:
+        # Mix voice + low-volume looped music bed with fade in/out.
+        mv = float(music_cfg.get("volume", 0.15))
+        m_fi = float(music_cfg.get("fade_in", 1.0))
+        m_fo = float(music_cfg.get("fade_out", 1.5))
+        fade_out_start = max(0.0, total_dur - m_fo)
+        filter_complex = (
+            f"[0:v]{vf}[v];"
+            f"[1:a]loudnorm=I=-14:LRA=11:TP=-1.5[voice];"
+            f"[2:a]aloop=loop=-1:size=2e9,atrim=0:{total_dur:.3f},"
+            f"volume={mv:.3f},"
+            f"afade=t=in:st=0:d={m_fi:.3f},"
+            f"afade=t=out:st={fade_out_start:.3f}:d={m_fo:.3f}[music];"
+            f"[voice][music]amix=inputs=2:duration=longest:dropout_transition=0[a]"
+        )
+        run_ffmpeg([
+            "-i", str(still_motion),
+            "-i", str(audio),
+            "-i", str(music_path),
+            "-filter_complex", filter_complex,
+            "-map", "[v]",
+            "-map", "[a]",
+            "-t", f"{total_dur:.3f}",
+            "-r", str(FPS),
+            "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+            "-pix_fmt", "yuv420p",
+            "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+            str(out),
+        ])
+        print(f"  payload built ({total_dur:.2f}s, captions burned, CTA at {cta_start:.2f}s, music bed @ volume={mv})")
+        return out
+
     af = "loudnorm=I=-14:LRA=11:TP=-1.5"
 
     run_ffmpeg([
