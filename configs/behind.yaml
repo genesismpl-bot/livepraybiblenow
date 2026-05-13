@@ -1,0 +1,63 @@
+# ── hook_pivot_pipeline.py config ─────────────────────────────────────
+# "Behind" — Segment 2 #9 from the script shortlist.
+# Theme: God's timing isn't late — biblical figures who started late.
+#
+# Run:
+#   python hook_pivot_pipeline.py configs/behind.yaml
+
+slug: behind
+
+# ── Segment 1: viral hook ────────────────────────────────────────────
+# TODO: set source to an external viral clip (e.g. one of the hook
+# variants from the MMO framework — boomwhackers, marble drop, etc.).
+hook:
+  source: "TODO_set_path_to_external_viral_hook.mp4"
+  start: 0.0
+  end:   12.0
+
+# ── Segment 2: bible payload ─────────────────────────────────────────
+script: |
+  You think you're *behind* in life?
+  Joseph was *thirty* before his dream came true.
+  Moses was *eighty* when God called him.
+  Abraham had his son at *one hundred*.
+  God's timing isn't *late* — it's *exact*.
+
+# Hopeful sunrise backdrop matches the theme.
+still_path: assets/stills/sunrise_ridge.png
+
+# Slow Ken-Burns zoom across the payload duration.
+motion:
+  type:     ken_burns_slow_zoom
+  zoom_to:  1.08
+  duration: 12.0
+
+# ── Voice ────────────────────────────────────────────────────────────
+# Reuses the ElevenLabs voice from the MMO `stop_doomscrolling_real_cost`
+# variant. Swap voice_id when a faith-specific voice is chosen.
+voice:
+  voice_id:   "nzFihrBIvB34imQBuxub"
+  stability:  0.40
+  similarity: 0.80
+  style:      0.55
+  apply_phone_mic_filter: false
+
+# ── Captions: sentence-mode with gold emphasis on *marked* words ─────
+captions:
+  style:           source_match
+  mode:            sentence
+  font_size:       84
+  margin_v:        0
+  colour:          "#FFFFFF"
+  emphasis_colour: "#FFD700"
+  chunk_size:      4
+
+# ── End-card CTA ─────────────────────────────────────────────────────
+cta:
+  text:     "Follow @livepraybible for daily verses"
+  duration: 1.5
+  fade_in:  0.4
+
+# ── Generation knobs ─────────────────────────────────────────────────
+variants:   3
+output_dir: output/behind

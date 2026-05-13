@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Env / secrets
+.env
+.env.local
+*.key
+
+# Pipeline outputs (large generated media)
+output/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Local notes
+scratch/

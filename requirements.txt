@@ -1,0 +1,24 @@
+# MMO New Framework — Python Dependencies
+
+# Core
+anthropic>=0.20.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# Image generation (Gemini / Nanobanana 2)
+google-genai>=0.8.0
+
+# Overlay graphics generation
+Pillow>=10.0.0
+
+# Kling Avatar v2 — Direct API (JWT auth, no middleman)
+PyJWT>=2.8.0
+
+# Watermark removal (lib/watermark_remover.py)
+easyocr>=1.7.0
+
+# Install all:
+#   pip install -r requirements.txt
+# Or with uv:
+#   uv pip install -r requirements.txt
