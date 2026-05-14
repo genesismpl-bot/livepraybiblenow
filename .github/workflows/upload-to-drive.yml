@@ -1,0 +1,64 @@
+name: Upload to Google Drive
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_run_id:
+        description: "Run ID of a workflow that produced an MP4 artifact (optional)."
+        required: false
+      artifact_name:
+        description: "Name of the artifact to download (defaults to 'final-mp4')."
+        required: false
+        default: "final-mp4"
+      drive_name:
+        description: "Filename to use in Drive (defaults to the local filename)."
+        required: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install upload deps
+        run: pip install google-api-python-client google-auth
+
+      - name: Download artifact from prior run
+        if: ${{ inputs.artifact_run_id != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: incoming/
+          run-id: ${{ inputs.artifact_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Locate file to upload
+        id: locate
+        run: |
+          shopt -s nullglob
+          files=(incoming/*.mp4)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::error::No .mp4 found under incoming/. Pass artifact_run_id, or extend this workflow to render before uploading."
+            exit 1
+          fi
+          echo "file=${files[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Drive
+        env:
+          GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        run: |
+          if [ -n "${{ inputs.drive_name }}" ]; then
+            python scripts/upload_to_drive.py "${{ steps.locate.outputs.file }}" --name "${{ inputs.drive_name }}"
+          else
+            python scripts/upload_to_drive.py "${{ steps.locate.outputs.file }}"
+          fi
