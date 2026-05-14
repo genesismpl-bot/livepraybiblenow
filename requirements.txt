@@ -18,6 +18,10 @@ PyJWT>=2.8.0
 # Watermark removal (lib/watermark_remover.py)
 easyocr>=1.7.0
 
+# Google Drive upload (scripts/upload_to_drive.py)
+google-api-python-client>=2.120.0
+google-auth>=2.28.0
+
 # Install all:
 #   pip install -r requirements.txt
 # Or with uv:
