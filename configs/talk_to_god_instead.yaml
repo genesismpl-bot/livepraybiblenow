@@ -1,0 +1,74 @@
+# ── hook_pivot_pipeline.py config ─────────────────────────────────────
+# Day 13 — Pillar 3 (Trending clip). Pivot C.
+# "Talk to God instead."
+#
+# Run:
+#   python hook_pivot_pipeline.py configs/talk_to_god_instead.yaml
+
+slug: talk_to_god_instead
+
+# ── Segment 1: viral hook ────────────────────────────────────────────
+# TODO: point at an external trending clip (~12s).
+hook:
+  source: "assets/hooks/boomwhackers_hook.mp4"
+  start: 0.0
+  end:   12.0
+
+# ── Segment 2: bible payload ─────────────────────────────────────────
+# Opener C + "give it to God" prayer.
+script: |
+  Stop *doomscrolling*.
+  Talk to *God* instead.
+  That thing you keep *worrying* about? Hand it over.
+  God, I give it to *You*.
+  I trust Your *timing* more than my *fear*.
+  Then watch what He *does*.
+  Amen.
+
+# Fixed committed backdrop (no Gemini gen needed).
+still_path: assets/stills/sunrise_ridge.png
+
+# Slow Ken-Burns zoom across the payload duration.
+motion:
+  type:     ken_burns_slow_zoom
+  zoom_to:  1.08
+  duration: 12.0
+
+# ── Voice ────────────────────────────────────────────────────────────
+# Dallin — middle-aged American male, calming/deep/warm.
+voice:
+  voice_id:   "alFofuDn3cOwyoz1i44T"
+  stability:  0.50
+  similarity: 0.80
+  style:      0.35
+  apply_phone_mic_filter: false
+
+# ── Captions: sentence-mode with gold emphasis on *marked* words ─────
+captions:
+  style:           source_match
+  mode:            sentence
+  font_size:       84
+  margin_v:        280
+  alignment:       2
+  colour:          "#FFFFFF"
+  emphasis_colour: "#FFD700"
+  chunk_size:      4
+
+# ── End-card CTA ─────────────────────────────────────────────────────
+cta:
+  text:     "Follow @livepraybible for daily prayer"
+  duration: 1.5
+  fade_in:  0.4
+  y_frac:   0.78
+  font_size: 64
+
+# ── Music bed ────────────────────────────────────────────────────────
+music:
+  path:     "assets/music/gregorian_chant.mp3"
+  volume:   0.15
+  fade_in:  1.0
+  fade_out: 1.5
+
+# ── Generation knobs ─────────────────────────────────────────────────
+variants:   1
+output_dir: output/talk_to_god_instead

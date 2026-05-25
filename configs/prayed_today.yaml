@@ -1,0 +1,73 @@
+# ── hook_pivot_pipeline.py config ─────────────────────────────────────
+# Day 4 — Pillar 3 (Trending clip). Pivot A.
+# "Have you prayed today?"
+#
+# Run:
+#   python hook_pivot_pipeline.py configs/prayed_today.yaml
+
+slug: prayed_today
+
+# ── Segment 1: viral hook ────────────────────────────────────────────
+# TODO: point at an external oddly-satisfying trending clip (~12s).
+hook:
+  source: "assets/hooks/boomwhackers_hook.mp4"
+  start: 0.0
+  end:   12.0
+
+# ── Segment 2: bible payload ─────────────────────────────────────────
+# Opener A + "talk to Him before you scroll" prayer.
+script: |
+  Stop *doomscrolling*.
+  Have you *prayed* today?
+  Before you pick your phone back up, talk to Him.
+  Thank You, God, for this *breath*, this day, this *second chance*.
+  Keep my heart soft and my eyes open to *You*.
+  Amen.
+
+# Fixed committed backdrop (no Gemini gen needed).
+still_path: assets/stills/candle_dark.png
+
+# Slow Ken-Burns zoom across the payload duration.
+motion:
+  type:     ken_burns_slow_zoom
+  zoom_to:  1.08
+  duration: 12.0
+
+# ── Voice ────────────────────────────────────────────────────────────
+# Dallin — middle-aged American male, calming/deep/warm.
+voice:
+  voice_id:   "alFofuDn3cOwyoz1i44T"
+  stability:  0.50
+  similarity: 0.80
+  style:      0.35
+  apply_phone_mic_filter: false
+
+# ── Captions: sentence-mode with gold emphasis on *marked* words ─────
+captions:
+  style:           source_match
+  mode:            sentence
+  font_size:       84
+  margin_v:        280
+  alignment:       2
+  colour:          "#FFFFFF"
+  emphasis_colour: "#FFD700"
+  chunk_size:      4
+
+# ── End-card CTA ─────────────────────────────────────────────────────
+cta:
+  text:     "Follow @livepraybible for daily prayer"
+  duration: 1.5
+  fade_in:  0.4
+  y_frac:   0.78
+  font_size: 64
+
+# ── Music bed ────────────────────────────────────────────────────────
+music:
+  path:     "assets/music/gregorian_chant.mp3"
+  volume:   0.15
+  fade_in:  1.0
+  fade_out: 1.5
+
+# ── Generation knobs ─────────────────────────────────────────────────
+variants:   1
+output_dir: output/prayed_today

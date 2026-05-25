@@ -1,0 +1,47 @@
+# Pillar 2 sample — authentic "person praying" footage + verse text.
+# Style ref: @bondandseek (serif verse caption, candid homey vibe).
+# NOTE: background is AI-generated for this sample; for production, swap in
+# real/stock footage of someone praying (AI humans can look uncanny).
+#   python prayer_reel_pipeline.py configs/p2_sample.yaml
+slug: p2_sample
+
+background:
+  type: scene                    # Gemini still → Kling i2v motion
+  scene: >
+    A young woman kneeling at the side of a bed in a softly lit bedroom in
+    the morning, hands clasped together in prayer, head bowed, an open Bible
+    resting on a white duvet, warm natural window light, cozy relatable
+    home, muted warm tones, authentic documentary feel, shot from behind /
+    side so the face is not the focus.
+  motion: >
+    Very subtle motion only — soft breathing, gentle curtain sway, soft
+    morning light flicker, locked-off camera, no face distortion.
+  kling_duration: 5
+
+duration: 13
+darken: 0.18
+
+text:
+  font: serif
+  size: 58
+  align: center
+  position: lower
+  color: white
+  lines: |
+    The Bible says
+    in Exodus 14:14:
+
+    "The Lord shall fight
+    for you, and ye shall
+    hold your peace."
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/soft_piano_prayer.mp3"   # royalty-free (ElevenLabs Music)
+  volume: 0.22
+
+output_dir: output/p2_sample

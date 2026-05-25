@@ -1,0 +1,45 @@
+# Pillar 1 (Route B) — AI-generated MOVING ocean background.
+# scene → Gemini still → Kling image-to-video → composite prayer text.
+#   python prayer_reel_pipeline.py configs/p1_ocean.yaml
+slug: p1_ocean
+
+background:
+  type: scene
+  scene: >
+    Calm endless ocean at sunrise, gentle glassy waves rolling slowly
+    toward the horizon, a warm golden sun low on the water casting a
+    shimmering reflection path across the surface, soft mist, pastel
+    peach and gold sky fading to soft blue, peaceful and meditative,
+    cinematic, photorealistic, no people, no boats.
+  motion: >
+    Gentle glassy waves rolling slowly toward the horizon, the golden
+    reflection shimmering on the water, a slow drifting camera gliding
+    just above the surface, calm and serene, no people, no text.
+  kling_duration: 5
+
+duration: 14
+darken: 0.25
+
+text:
+  font: serif
+  size: 70
+  align: center
+  position: center
+  color: white
+  lines: |
+    Be still, and know.
+
+    Your peace washes
+    over me like
+    the morning tide.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+# No music — add a trending/worship audio in-app on Instagram.
+
+output_dir: output/p1_ocean

@@ -1,0 +1,45 @@
+# Pillar 1 sample (Route B) — AI-generated MOVING sky background.
+# scene → Gemini still from prompt → Kling image-to-video animates it.
+#   python prayer_reel_pipeline.py configs/p1_sky.yaml
+slug: p1_sky
+
+background:
+  type: scene
+  scene: >
+    Vast golden-hour sky filled with glowing clouds, brilliant
+    volumetric god-rays breaking through the clouds and fanning toward
+    the viewer, warm amber and soft white light, gentle dust and
+    atmosphere in the air, deep blue sky above, serene and reverent
+    heavenly mood, cinematic, photorealistic, no people.
+  motion: >
+    Slow cinematic drift of the clouds across the frame, god-rays
+    gently shimmering and shifting, a very subtle slow camera push-in,
+    calm and serene, no people, no text.
+  kling_duration: 5
+
+duration: 14          # raw 5s clip slowed to fill (calm slow-mo)
+darken: 0.25          # dark overlay so white text reads cleanly
+
+text:
+  font: serif
+  size: 70
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord, quiet my heart.
+
+    Let Your light
+    break through
+    every shadow.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+# No music — add a trending/worship audio in-app on Instagram.
+
+output_dir: output/p1_sky

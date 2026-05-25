@@ -1,0 +1,75 @@
+# ── hook_pivot_pipeline.py config ─────────────────────────────────────
+# Day 11 — Pillar 3 (Viral hook). Pivot C.
+# "A prayer for hard times."
+#
+# Run:
+#   python hook_pivot_pipeline.py configs/prayer_hard_times.yaml
+
+slug: prayer_hard_times
+
+# ── Segment 1: viral hook ────────────────────────────────────────────
+# TODO: point at an external viral motivation clip (~12s),
+# e.g. a Bruce Lee motivation reel.
+hook:
+  source: "assets/hooks/boomwhackers_hook.mp4"
+  start: 0.0
+  end:   12.0
+
+# ── Segment 2: bible payload ─────────────────────────────────────────
+# Opener C + "for when life feels heavy" prayer.
+script: |
+  Stop *doomscrolling*.
+  Talk to *God* instead.
+  When everything feels *heavy*:
+  God, I can't do this on my own, and I don't *have* to.
+  Carry what I *can't*.
+  Give me *strength* for today. Just today.
+  Amen.
+
+# Fixed committed backdrop (no Gemini gen needed).
+still_path: assets/stills/candle_dark.png
+
+# Slow Ken-Burns zoom across the payload duration.
+motion:
+  type:     ken_burns_slow_zoom
+  zoom_to:  1.08
+  duration: 12.0
+
+# ── Voice ────────────────────────────────────────────────────────────
+# Dallin — middle-aged American male, calming/deep/warm.
+voice:
+  voice_id:   "alFofuDn3cOwyoz1i44T"
+  stability:  0.50
+  similarity: 0.80
+  style:      0.35
+  apply_phone_mic_filter: false
+
+# ── Captions: sentence-mode with gold emphasis on *marked* words ─────
+captions:
+  style:           source_match
+  mode:            sentence
+  font_size:       84
+  margin_v:        280
+  alignment:       2
+  colour:          "#FFFFFF"
+  emphasis_colour: "#FFD700"
+  chunk_size:      4
+
+# ── End-card CTA ─────────────────────────────────────────────────────
+cta:
+  text:     "Follow @livepraybible for daily prayer"
+  duration: 1.5
+  fade_in:  0.4
+  y_frac:   0.78
+  font_size: 64
+
+# ── Music bed ────────────────────────────────────────────────────────
+music:
+  path:     "assets/music/gregorian_chant.mp3"
+  volume:   0.15
+  fade_in:  1.0
+  fade_out: 1.5
+
+# ── Generation knobs ─────────────────────────────────────────────────
+variants:   1
+output_dir: output/prayer_hard_times

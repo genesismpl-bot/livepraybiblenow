@@ -70,7 +70,7 @@ def load_config(path: Path, no_hook: bool = False) -> dict[str, Any]:
     required = ["slug", "script"]
     if not no_hook:
         required.append("hook")
-    if "still_path" not in cfg:
+    if "still_path" not in cfg and "background_video" not in cfg:
         required.append("scene")
     for field in required:
         if field not in cfg:
@@ -281,6 +281,34 @@ def animate_still(still: Path, audio: Path, cfg: dict, work: Path) -> Path:
     audio_dur = get_duration(str(audio))
     cta_dur = float(cfg["cta"]["duration"])
     target_dur = audio_dur + cta_dur
+
+    # ── Moving video background (Route A: stock/AI clip) ──────────────
+    # If background_video is set, loop + scale + centre-crop a real clip
+    # to fill 1080x1920 for the payload duration, instead of animating a
+    # still. The clip's own motion replaces the Ken-Burns zoom.
+    bg_video = cfg.get("background_video")
+    if bg_video:
+        src = Path(bg_video).expanduser()
+        if not src.is_absolute():
+            src = ROOT / src
+        if not src.exists():
+            raise FileNotFoundError(f"background_video not found: {src}")
+        run_ffmpeg([
+            "-stream_loop", "-1", "-i", str(src),
+            "-t", f"{target_dur:.3f}",
+            "-vf", (
+                f"scale={VIDEO_W}:{VIDEO_H}:force_original_aspect_ratio=increase,"
+                f"crop={VIDEO_W}:{VIDEO_H},fps={FPS}"
+            ),
+            "-r", str(FPS),
+            "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+            "-pix_fmt", "yuv420p",
+            "-an",
+            str(out),
+        ])
+        print(f"  background video fitted to {VIDEO_W}x{VIDEO_H} "
+              f"({target_dur:.2f}s, looped): {src.name}")
+        return out
 
     motion = cfg["motion"]
     mtype = motion["type"]
@@ -534,9 +562,12 @@ def main():
         hook = trim_hook(cfg, work) if not args.skip_hook else (work / "hook.mp4")
     print()
 
-    # 2. variants (or explicit still_path override)
+    # 2. variants (or explicit still_path / background_video override)
     print("[2/7] Background still")
-    if cfg.get("still_path"):
+    if cfg.get("background_video"):
+        chosen = None
+        print(f"  using background_video: {cfg['background_video']}")
+    elif cfg.get("still_path"):
         chosen = Path(cfg["still_path"])
         if not chosen.is_absolute():
             chosen = ROOT / chosen
