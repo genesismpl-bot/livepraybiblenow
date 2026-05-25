@@ -40,6 +40,7 @@ from lib.shared import (  # noqa: E402
     generate_voice_with_timestamps,
     get_duration,
     run_ffmpeg,
+    upload_to_r2,
 )
 from lib.explainer_captions import (  # noqa: E402
     generate_source_match_captions,
@@ -542,6 +543,7 @@ def main():
     ap.add_argument("--skip-voice", action="store_true", help="reuse existing voice.mp3")
     ap.add_argument("--skip-hook",  action="store_true", help="reuse existing hook.mp4")
     ap.add_argument("--no-hook",    action="store_true", help="skip Segment 1 entirely; payload.mp4 becomes the final output")
+    ap.add_argument("--upload-r2",  action="store_true", help="upload final.mp4 to Cloudflare R2 and print the public URL")
     args = ap.parse_args()
 
     cfg = load_config(args.config, no_hook=args.no_hook)
@@ -613,6 +615,10 @@ def main():
         final = concat(hook, payload, work)
     print(f"\n✓ DONE → {final}")
     print(f"  total: {get_duration(str(final)):.2f}s\n")
+
+    if args.upload_r2 or cfg.get("upload_r2"):
+        print("[+] Upload to R2")
+        upload_to_r2(str(final), f"{cfg['slug']}.mp4")
 
 
 def _load_words(work: Path) -> list[dict]:

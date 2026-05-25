@@ -37,7 +37,7 @@ sys.path.insert(0, str(ROOT))
 
 from lib.shared import (  # noqa: E402
     fal_upload, fal_submit, fal_poll, fal_fetch_result,
-    run_ffmpeg, get_duration,
+    run_ffmpeg, get_duration, upload_to_r2,
 )
 
 FAL_KLING_MODEL = "fal-ai/kling-video/v2/master/image-to-video"
@@ -229,6 +229,8 @@ def build_reel(cfg: dict, raw: Path, work: Path) -> Path:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("config")
+    ap.add_argument("--upload-r2", action="store_true",
+                    help="upload final.mp4 to Cloudflare R2 and print the public URL")
     args = ap.parse_args()
     cfg = yaml.safe_load(Path(args.config).read_text())
     for f in ("slug", "background", "text"):
@@ -242,6 +244,10 @@ def main():
     print("\n[2/2] Composite text + CTA")
     final = build_reel(cfg, raw, work)
     print(f"\n✓ DONE → {final}")
+
+    if args.upload_r2 or cfg.get("upload_r2"):
+        print("\n[+] Upload to R2")
+        upload_to_r2(str(final), f"{cfg['slug']}.mp4")
 
 
 if __name__ == "__main__":
