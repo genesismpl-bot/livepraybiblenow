@@ -1,0 +1,45 @@
+# Pillar 1 (Route B) — AI-generated MOVING forest-light background.
+# scene → Gemini still → Kling image-to-video → composite prayer text.
+#   python prayer_reel_pipeline.py configs/p1_forest.yaml
+slug: p1_forest
+
+background:
+  type: scene
+  scene: >
+    Looking up through a peaceful forest canopy, warm morning sunbeams
+    streaming through tall trees in soft volumetric god-rays, golden
+    dust and pollen floating gently in the light, lush green leaves,
+    dappled glowing light, serene sacred atmosphere, shallow depth of
+    field, cinematic, photorealistic, no people.
+  motion: >
+    Sunbeams gently shifting through the trees, golden dust drifting in
+    the light, leaves swaying softly in a light breeze, a slow gentle
+    upward camera tilt, calm and prayerful, no people, no text.
+  kling_duration: 5
+
+duration: 14
+darken: 0.25
+
+text:
+  font: serif
+  size: 70
+  align: center
+  position: center
+  color: white
+  lines: |
+    Father, lead me
+    into Your light.
+
+    Where You guide,
+    I will follow.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+# No music — add a trending/worship audio in-app on Instagram.
+
+output_dir: output/p1_forest

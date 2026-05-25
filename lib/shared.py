@@ -294,3 +294,55 @@ def format_ass_time(seconds: float) -> str:
     m = int((seconds % 3600) // 60)
     s = seconds % 60
     return f"{h}:{m:02d}:{s:05.2f}"
+
+
+# ── R2 (Cloudflare) upload ───────────────────────────────────────────
+
+def upload_to_r2(local_path: str, key: str | None = None) -> str | None:
+    """Upload a file to the Cloudflare R2 bucket via rclone (S3 API).
+
+    Reads credentials from the environment (loaded from .env or CI secrets):
+      R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT, R2_BUCKET
+    Optional:
+      R2_PUBLIC_BASE_URL  → if set, the public link is returned/printed.
+
+    Returns the public URL (or the r2:// path if no public base is set),
+    or None if R2 env vars are missing (upload is skipped, not fatal).
+    Requires `rclone` on PATH.
+    """
+    bucket   = os.environ.get("R2_BUCKET")
+    ak       = os.environ.get("R2_ACCESS_KEY_ID")
+    sk       = os.environ.get("R2_SECRET_ACCESS_KEY")
+    endpoint = os.environ.get("R2_ENDPOINT")
+    if not all([bucket, ak, sk, endpoint]):
+        print("  R2 upload skipped (R2_* env vars not set)")
+        return None
+    if shutil.which("rclone") is None:
+        print("  R2 upload skipped (rclone not found on PATH)")
+        return None
+
+    key = key or Path(local_path).name
+    # Configure an ephemeral rclone remote 'r2up' purely via env vars so no
+    # secret ever touches the command line or a config file on disk.
+    env = dict(
+        os.environ,
+        RCLONE_CONFIG_R2UP_TYPE="s3",
+        RCLONE_CONFIG_R2UP_PROVIDER="Cloudflare",
+        RCLONE_CONFIG_R2UP_ACCESS_KEY_ID=ak,
+        RCLONE_CONFIG_R2UP_SECRET_ACCESS_KEY=sk,
+        RCLONE_CONFIG_R2UP_ENDPOINT=endpoint,
+    )
+    # Flags for scoped R2 tokens (object read+write, no bucket-create):
+    #   --s3-no-check-bucket  : don't attempt CreateBucket/HeadBucket
+    #   --no-update-modtime   : skip the server-side CopyObject mtime update
+    #   --s3-no-head          : skip the post-upload HEAD check
+    subprocess.run(
+        ["rclone", "copyto",
+         "--s3-no-check-bucket", "--no-update-modtime", "--s3-no-head",
+         str(local_path), f"r2up:{bucket}/{key}"],
+        env=env, check=True,
+    )
+    base = (os.environ.get("R2_PUBLIC_BASE_URL") or "").rstrip("/")
+    url = f"{base}/{key}" if base else f"r2://{bucket}/{key}"
+    print(f"  uploaded to R2: {url}")
+    return url

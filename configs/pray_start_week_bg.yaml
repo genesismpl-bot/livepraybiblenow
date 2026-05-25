@@ -1,0 +1,74 @@
+# ── hook_pivot_pipeline.py config ─────────────────────────────────────
+# SAMPLE — Day 1 VO, but with a MOVING video background (Route A).
+# A/B comparison vs. the static still version (configs/pray_start_week.yaml).
+#
+# Run:
+#   python hook_pivot_pipeline.py configs/pray_start_week_bg.yaml
+
+slug: pray_start_week_bg
+
+# ── Segment 1: viral hook ────────────────────────────────────────────
+hook:
+  source: "assets/hooks/boomwhackers_hook.mp4"
+  start: 0.0
+  end:   12.0
+
+# ── Segment 2: bible payload ─────────────────────────────────────────
+script: |
+  Stop *doomscrolling*.
+  Have you *prayed* today?
+  Father, as this week begins, go before me.
+  Order my steps and calm my mind.
+  Give me *strength* for whatever comes.
+  Let me walk in *peace*, not fear.
+  Amen.
+
+# ── Moving background (Route A) ──────────────────────────────────────
+# Cinematic clouds + god-rays time-lapse (Wikimedia Commons, free).
+# Looped + centre-cropped to 1080x1920 over the payload duration.
+background_video: assets/backgrounds/clouds_sunrays.webm
+
+# motion is ignored when background_video is set (the clip carries its
+# own motion), but kept here so the schema stays consistent.
+motion:
+  type:     locked
+  zoom_to:  1.0
+  duration: 12.0
+
+# ── Voice ────────────────────────────────────────────────────────────
+voice:
+  voice_id:   "alFofuDn3cOwyoz1i44T"
+  stability:  0.50
+  similarity: 0.80
+  style:      0.35
+  apply_phone_mic_filter: false
+
+# ── Captions: sentence-mode with gold emphasis on *marked* words ─────
+captions:
+  style:           source_match
+  mode:            sentence
+  font_size:       84
+  margin_v:        280
+  alignment:       2
+  colour:          "#FFFFFF"
+  emphasis_colour: "#FFD700"
+  chunk_size:      4
+
+# ── End-card CTA ─────────────────────────────────────────────────────
+cta:
+  text:     "Follow @livepraybible for a prayer every day"
+  duration: 1.5
+  fade_in:  0.4
+  y_frac:   0.78
+  font_size: 64
+
+# ── Music bed ────────────────────────────────────────────────────────
+music:
+  path:     "assets/music/gregorian_chant.mp3"
+  volume:   0.15
+  fade_in:  1.0
+  fade_out: 1.5
+
+# ── Generation knobs ─────────────────────────────────────────────────
+variants:   1
+output_dir: output/pray_start_week_bg

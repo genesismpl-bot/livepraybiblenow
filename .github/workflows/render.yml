@@ -1,0 +1,81 @@
+name: Render reel
+
+# Manually render a config in CI, then auto-publish the final.mp4 to R2.
+#
+# Works out-of-the-box for prayer_reel_pipeline.py with background.type:
+#   scene/animate_still (everything it needs is generated from API keys).
+# NOTE: hook_pivot_pipeline.py needs a Segment-1 hook clip
+#   (assets/hooks/*.mp4), which is NOT committed to the repo. To run it in
+#   CI, first make that clip available (e.g. add a step to pull it from R2).
+
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline:
+        description: "Pipeline to run"
+        type: choice
+        default: prayer_reel_pipeline.py
+        options:
+          - prayer_reel_pipeline.py
+          - hook_pivot_pipeline.py
+      config:
+        description: "Config path (e.g. configs/p1_sky.yaml)"
+        type: string
+        default: configs/p1_sky.yaml
+
+  # ── Autonomous schedule (disabled by default) ──────────────────────
+  # Each scheduled run generates a fresh video and spends Kling/Gemini
+  # credits, so this is left OFF intentionally. Uncomment and decide a
+  # config-rotation strategy before enabling.
+  # schedule:
+  #   - cron: "0 13 * * *"   # 13:00 UTC daily
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ELEVENLABS_API_KEY:   ${{ secrets.ELEVENLABS_API_KEY }}
+      FAL_KEY:              ${{ secrets.FAL_KEY }}
+      GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
+      R2_ACCOUNT_ID:        ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID:     ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT:          ${{ secrets.R2_ENDPOINT }}
+      R2_BUCKET:            ${{ secrets.R2_BUCKET }}
+      R2_PUBLIC_BASE_URL:   ${{ secrets.R2_PUBLIC_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps (ffmpeg, rclone)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg rclone
+
+      - name: Install Python deps
+        run: pip install pyyaml python-dotenv requests google-genai
+
+      - name: Render + upload to R2
+        id: render
+        run: |
+          python "${{ inputs.pipeline }}" "${{ inputs.config }}" --upload-r2 2>&1 | tee run.log
+          URL=$(grep -oE 'https://[^[:space:]]+\.mp4' run.log | tail -1)
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Write run summary
+        if: always()
+        run: |
+          {
+            echo "### Render result"
+            echo ""
+            echo "- **Pipeline:** \`${{ inputs.pipeline }}\`"
+            echo "- **Config:** \`${{ inputs.config }}\`"
+            echo "- **Public URL:** ${{ steps.render.outputs.url }}"
+          } >> "$GITHUB_STEP_SUMMARY"

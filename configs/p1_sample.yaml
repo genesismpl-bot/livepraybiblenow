@@ -1,0 +1,41 @@
+# Pillar 1 sample — cinematic prayer over MOVING nature footage.
+# Style ref: @pray (white sans, left/centered, no watermark).
+#   python prayer_reel_pipeline.py configs/p1_sample.yaml
+slug: p1_sample
+
+background:
+  type: animate_still           # Kling i2v turns the still into real motion
+  still: assets/stills/sunrise_ridge.png
+  motion: >
+    Cinematic slow drifting clouds over a mountain ridge at golden hour,
+    gentle shifting light, a very subtle slow camera push-in, calm and
+    serene, no people, no text.
+  kling_duration: 5
+
+duration: 14                     # slowed to fill (calm slow-mo)
+darken: 0.28                     # dark overlay so white text reads
+
+text:
+  font: sans
+  size: 66
+  align: center
+  position: center
+  color: white
+  lines: |
+    God, I surrender
+    my worries to You.
+    Lead me, guide me,
+    give me Your peace.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/soft_cinematic_pad.mp3"   # royalty-free (ElevenLabs Music)
+  volume: 0.22
+
+output_dir: output/p1_sample
