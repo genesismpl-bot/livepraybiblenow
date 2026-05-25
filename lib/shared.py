@@ -332,8 +332,14 @@ def upload_to_r2(local_path: str, key: str | None = None) -> str | None:
         RCLONE_CONFIG_R2UP_SECRET_ACCESS_KEY=sk,
         RCLONE_CONFIG_R2UP_ENDPOINT=endpoint,
     )
+    # Flags for scoped R2 tokens (object read+write, no bucket-create):
+    #   --s3-no-check-bucket  : don't attempt CreateBucket/HeadBucket
+    #   --no-update-modtime   : skip the server-side CopyObject mtime update
+    #   --s3-no-head          : skip the post-upload HEAD check
     subprocess.run(
-        ["rclone", "copyto", str(local_path), f"r2up:{bucket}/{key}"],
+        ["rclone", "copyto",
+         "--s3-no-check-bucket", "--no-update-modtime", "--s3-no-head",
+         str(local_path), f"r2up:{bucket}/{key}"],
         env=env, check=True,
     )
     base = (os.environ.get("R2_PUBLIC_BASE_URL") or "").rstrip("/")
