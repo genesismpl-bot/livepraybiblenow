@@ -1,0 +1,32 @@
+# Chorus start times (seconds) for tracks in the background-music folder.
+# Used by prayer_reel_pipeline.py when `music.start_at` is unset and the
+# pipeline auto-rotates a track from `music.folder`.
+#
+# Values are best-effort estimates of where the song's main hook/chorus
+# begins. Tracks not listed here fall back to a heuristic (~30% in,
+# clamped to [40, 75]s). Override per-config with `music.start_at`.
+
+"AURORA - Runaway.mp3": 60
+"Anne Wilson - My Jesus (Official Music Video).mp3": 50
+"Benson Boone - Beautiful Things (Official Music Video).mp3": 55
+"Bon Iver - Holocene - Official Video.mp3": 130
+"Brandon Lake - Praise You Anywhere (Official Music Video).mp3": 55
+"CeCe Winans - Goodness of God (Official Video).mp3": 50
+"Cody Carnes - Run To The Father (Live at Motion Conference).mp3": 60
+"Forrest Frank - GOOD DAY (Official Audio).mp3": 40
+"God Is.mp3": 50
+"Gratitude (Chosen Performance) - Brandon Lake.mp3": 50
+"Graves Into Gardens ft. Brandon Lake ｜ Live ｜ Elevation Worship.mp3": 60
+"James Arthur - Say You Won't Let Go.mp3": 50
+"Lauren Daigle - You Say (Official Music Video).mp3": 60
+"Lewis Capaldi - Someone You Loved.mp3": 65
+"Lord Huron - The Night We Met (Official Lyric Video).mp3": 40
+"Oceans (Where Feet May Fail) Lyric Video - Hillsong UNITED.mp3": 90
+"Pat Barrett - Build My Life (feat. Chris Tomlin) (Live).mp3": 55
+"Phil Wickham - House Of The Lord (Official Music Video).mp3": 50
+"Promises (feat. Joe L Barnes & Naomi Raine) ｜ Maverick City Music ｜ TRIBL.mp3": 60
+"Reckless Love (Live with story) - Cory Asbury ｜ Heaven Come 2017.mp3": 60
+"Same God (Feat. Jonsal Barrientes) ｜ Elevation Worship.mp3": 55
+"Sleeping At Last - ＂Saturn＂ (Official Music Video).mp3": 90
+"Thank You Jesus - Hillsong Worship.mp3": 40
+"Tom Odell - Another Love (Official Video).mp3": 70
