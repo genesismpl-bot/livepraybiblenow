@@ -147,10 +147,21 @@ def resolve_background(cfg: dict, work: Path) -> Path:
         if isinstance(v, str) and v.startswith(("http://", "https://")):
             cache = work / "background_source.mp4"
             if not cache.exists():
-                import urllib.request
+                import requests
                 cache.parent.mkdir(parents=True, exist_ok=True)
                 print(f"  downloading background: {v}")
-                urllib.request.urlretrieve(v, cache)
+                # Use a real UA — Cloudflare R2.dev returns 403 for the default
+                # python-urllib/python-requests UAs.
+                r = requests.get(
+                    v,
+                    headers={"User-Agent": "Mozilla/5.0 livepraybible-pipeline/1.0"},
+                    stream=True, timeout=120, allow_redirects=True,
+                )
+                r.raise_for_status()
+                with open(cache, "wb") as f:
+                    for chunk in r.iter_content(64 * 1024):
+                        if chunk:
+                            f.write(chunk)
             return cache
         src = Path(v).expanduser()
         if not src.is_absolute():
