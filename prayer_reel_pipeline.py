@@ -210,12 +210,67 @@ def build_reel(cfg: dict, raw: Path, work: Path) -> Path:
             f"alpha='{alpha}':enable='gte(t,{start:.2f})'"
         )
 
-    music = (cfg.get("music") or {}).get("path")
+    music_cfg = cfg.get("music") or {}
+    music = music_cfg.get("path")
+    # Folder rotation: if no explicit path, pick a deterministic track from
+    # `music.folder` keyed on hash(slug). Same slug → same track always
+    # (reproducible); different slugs spread evenly across the folder.
+    if not music and music_cfg.get("folder"):
+        import hashlib
+        folder = Path(music_cfg["folder"]).expanduser()
+        if folder.exists():
+            tracks = sorted(
+                p for p in folder.iterdir()
+                if p.is_file() and p.suffix.lower() in (".mp3", ".wav", ".m4a")
+            )
+            if tracks:
+                idx = int(hashlib.md5(cfg["slug"].encode()).hexdigest(), 16) % len(tracks)
+                music = str(tracks[idx])
+                print(f"  music (rotation {idx + 1}/{len(tracks)}): {tracks[idx].name}")
+            else:
+                print(f"  music folder has no audio files: {folder}")
+        else:
+            print(f"  music folder not found: {folder}")
     args = ["-i", str(raw)]
     if music and Path(music).exists():
-        mv = float((cfg.get("music") or {}).get("volume", 0.18))
-        args += ["-i", str(music), "-filter_complex",
-                 f"[0:v]{vf}[v];[1:a]volume={mv},afade=t=out:st={dur-1.5:.2f}:d=1.5[a]",
+        mv       = float(music_cfg.get("volume", 0.18))
+        start_at = float(music_cfg.get("start_at", 0))
+        fade_in  = float(music_cfg.get("fade_in", 0))
+        # If no explicit start, land on the chorus: look up the track in
+        # assets/music/chorus_offsets.yaml; else fall back to a heuristic
+        # (~30% into the song, clamped to [40, 75]s).
+        if start_at == 0:
+            offsets_path = ROOT / "assets" / "music" / "chorus_offsets.yaml"
+            if offsets_path.exists():
+                try:
+                    offsets = yaml.safe_load(offsets_path.read_text()) or {}
+                    name = Path(music).name
+                    if name in offsets:
+                        start_at = float(offsets[name])
+                        print(f"  chorus start (table): {start_at:.0f}s")
+                except Exception as e:
+                    print(f"  chorus offsets read error: {e}")
+            if start_at == 0:
+                try:
+                    track_dur = get_duration(music)
+                    start_at = max(40.0, min(track_dur * 0.30, 75.0))
+                    print(f"  chorus start (heuristic): {start_at:.0f}s")
+                except Exception:
+                    pass
+        # Fade in 1s when seeking mid-song so it doesn't pop in.
+        if start_at > 0 and fade_in == 0:
+            fade_in = 1.0
+        music_in: list[str] = []
+        if start_at > 0:
+            # input-side seek — fast and accurate enough for music
+            music_in += ["-ss", f"{start_at:.3f}"]
+        music_in += ["-i", str(music)]
+        afilter = f"[1:a]volume={mv}"
+        if fade_in > 0:
+            afilter += f",afade=t=in:st=0:d={fade_in:.2f}"
+        afilter += f",afade=t=out:st={dur-1.5:.2f}:d=1.5[a]"
+        args += music_in + ["-filter_complex",
+                 f"[0:v]{vf}[v];{afilter}",
                  "-map", "[v]", "-map", "[a]", "-shortest"]
     else:
         args += ["-vf", vf, "-an"]

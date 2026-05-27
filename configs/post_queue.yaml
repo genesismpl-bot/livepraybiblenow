@@ -1,0 +1,41 @@
+# @livepraybible — Instagram post queue.
+#
+# Each entry is a Reel to schedule. scheduler.py reads this file, posts any
+# row whose `scheduled_at` is in the past + `status: queued`, then writes
+# the file back with the new status. Add new posts by adding new entries.
+#
+# Required fields per post:
+#   id            — short stable identifier (used in R2 key)
+#   video_url     — public R2 URL the IG Graph API will fetch  ← required in CI
+#   scheduled_at  — ISO 8601 with timezone (e.g. "2026-05-27T07:00:00-04:00")
+#   caption       — block scalar; up to 2,200 chars; up to 30 hashtags
+#   status        — queued | posted | failed | skipped
+# Optional:
+#   video         — local source path (informational; only used as a fallback
+#                   when running scheduler.py locally without video_url set)
+#
+# Use `scripts/queue_post.py` to add entries — it uploads to R2 and fills
+# in `video_url` for you.
+#
+# Filled in automatically after posting:
+#   container_id, media_id, posted_at, error
+
+posts: []
+
+# ──────────────────────────────────────────────────────────────────────
+# Example (copy/uncomment to schedule):
+#
+#   - id: p1_surrender
+#     video: output/p1_sample/final.mp4
+#     scheduled_at: 2026-05-27T07:00:00-04:00
+#     caption: |
+#       A prayer for surrender 🙏
+#
+#       God, I surrender my worries to You.
+#       Lead me, guide me, give me Your peace. Amen.
+#
+#       Save this for the next hard moment.
+#       Follow @livepraybible for a prayer every day.
+#
+#       #prayer #dailyprayer #faith #peace #jesus #christianreels
+#     status: queued

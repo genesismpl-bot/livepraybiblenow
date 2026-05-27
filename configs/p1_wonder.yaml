@@ -1,0 +1,41 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DVtTqH8ET8C (palm-lined boulevard under a cosmic
+# galaxy sky, lofipassion), saved to assets/backgrounds/cosmic_boulevard.mp4.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_wonder.yaml --upload-r2
+slug: p1_wonder
+
+background:
+  type: video
+  video: assets/backgrounds/cosmic_boulevard.mp4
+
+duration: 14          # 7.2s source → 14s (~1.95x slow-mo, dreamy)
+darken: 0.25          # bright cosmic streaks; light darken keeps the colors
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    What if heaven
+    were always
+    this close?
+
+    Lord, open my eyes
+    to see Your wonders
+    in the ordinary.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_wonder

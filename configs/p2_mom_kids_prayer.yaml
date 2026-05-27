@@ -1,0 +1,52 @@
+# Pillar 2 — Human Moments of Prayer.
+# Theme: a mother praying with her young children in the kids' bedroom.
+# Style ref: @bondandseek (serif verse caption, candid homey vibe).
+# NOTE: background is AI-generated for this sample; for production, swap in
+# real/stock footage (AI humans, especially children's faces, can look uncanny).
+#   python prayer_reel_pipeline.py configs/p2_mom_kids_prayer.yaml
+slug: p2_mom_kids_prayer
+
+background:
+  type: scene                    # Gemini still → Kling i2v motion
+  scene: >
+    A young mother kneeling on the floor of a cozy children's bedroom at
+    bedtime, two small children kneeling beside her in pyjamas, all three
+    with hands folded together in prayer and heads bowed. A small bedside
+    lamp casts warm amber light, soft toys and a picture book visible in
+    the background, simple white duvet on a small bed. Authentic
+    documentary feel, shot from behind / over the shoulder so faces are
+    not the focus, muted warm tones, intimate family moment.
+  motion: >
+    Very subtle motion only — soft breathing rising and falling, the
+    lamp light flickering gently, a curtain barely swaying, locked-off
+    camera, no face distortion, no extra limbs.
+  kling_duration: 5
+
+duration: 13
+darken: 0.20
+
+text:
+  font: serif
+  size: 56
+  align: center
+  position: lower
+  color: white
+  lines: |
+    The Bible says
+    in Matthew 18:20:
+
+    "For where two or three
+    are gathered together
+    in my name, there am I
+    in the midst of them."
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/soft_piano_prayer.mp3"   # royalty-free (ElevenLabs Music)
+  volume: 0.22
+
+output_dir: output/p2_mom_kids_prayer
