@@ -7,7 +7,7 @@ slug: p1_creation
 
 background:
   type: video
-  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/backgrounds/swiss_nature.mp4
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/swiss_nature.mp4
 
 duration: 16          # 14.6s source slowed to 16s (gentle slow-mo)
 darken: 0.30          # bright snow/water; bump darken so white text reads
