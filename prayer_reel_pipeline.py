@@ -276,8 +276,11 @@ def build_reel(cfg: dict, raw: Path, work: Path) -> Path:
                 if track_names:
                     idx = int(hashlib.md5(cfg["slug"].encode()).hexdigest(), 16) % len(track_names)
                     name = track_names[idx]
-                    suffix = Path(name).suffix or ".mp3"
-                    dest = work / f"music_track{suffix}"
+                    # Preserve the original filename locally so the
+                    # chorus_offsets.yaml lookup (keyed on Path(music).name)
+                    # matches the table entry instead of falling through to
+                    # the generic heuristic.
+                    dest = work / name
                     try:
                         download_from_r2(f"background music/{name}", str(dest))
                         music = str(dest)
