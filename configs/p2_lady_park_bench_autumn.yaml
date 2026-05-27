@@ -1,0 +1,51 @@
+# Pillar 2 — older woman on a park bench in autumn, surrendering worries.
+slug: p2_lady_park_bench_autumn
+scene_slot: lady_park_bench_autumn
+
+background:
+  type: scene
+  scene: >
+    An older woman in her sixties seated on a weathered wooden park
+    bench, wearing a soft knit cardigan, hands folded peacefully in
+    her lap, eyes gently closed in prayer, scattered autumn leaves on
+    the ground around her, warm amber and gold autumn trees softly
+    blurred behind, late afternoon sunlight, calm dignified expression,
+    intimate cinematic photography, shallow depth of field, no text,
+    no watermark.
+  motion: >
+    Very gentle leaves drifting down in the background, a very slow
+    cinematic push-in toward her, soft light slowly shifting, calm
+    and serene, she does not move, no camera shake.
+  kling_duration: 5
+
+duration: 13
+darken: 0.32
+
+text:
+  font: serif
+  size: 62
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord, I lay
+    every worry
+    at Your feet.
+
+    Quiet my heart
+    with Your peace.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/lauren_daigle_you_say.mp3"
+  volume: 0.32
+  start_at: 50
+  fade_in: 0.5
+
+output_dir: output/p2_lady_park_bench_autumn

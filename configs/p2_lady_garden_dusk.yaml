@@ -1,0 +1,52 @@
+# Pillar 2 — woman kneeling in her garden at dusk, hands in the soil.
+slug: p2_lady_garden_dusk
+scene_slot: lady_garden_dusk
+
+background:
+  type: scene
+  scene: >
+    A woman in her forties kneeling on a soft cloth in a quiet
+    backyard garden at dusk, both hands gently in the dark soil
+    between rows of small flowering plants, head softly bowed, a calm
+    reflective expression, warm golden-hour light from low on the
+    horizon, soft purple sky behind, fireflies just beginning,
+    intimate cinematic photography, shallow depth of field, no text,
+    no watermark.
+  motion: >
+    A very subtle slow camera push-in, the warm sky gradually
+    deepening to purple, the smallest movement of leaves in the
+    background, calm and reverent, she does not move, no camera
+    shake.
+  kling_duration: 5
+
+duration: 13
+darken: 0.32
+
+text:
+  font: serif
+  size: 62
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord, grow in me
+    what You planted.
+
+    Let my hands
+    do Your work
+    in this world.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/hillsong_united_oceans.mp3"
+  volume: 0.30
+  start_at: 90      # the build is slow on this one; drop near the swell
+  fade_in: 0.6
+
+output_dir: output/p2_lady_garden_dusk

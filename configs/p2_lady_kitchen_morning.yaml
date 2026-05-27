@@ -1,0 +1,51 @@
+# Pillar 2 — woman, sunlit kitchen, morning prayer over coffee.
+# Validated by scripts/validate_pillar2.py (lady ✓ / unique slot ✓ / music rotates ✓).
+slug: p2_lady_kitchen_morning
+scene_slot: lady_kitchen_morning   # uniqueness key for the Pillar 2 validator
+
+background:
+  type: scene
+  scene: >
+    A woman in her early thirties standing at a sunlit kitchen window,
+    both hands wrapped around a warm ceramic coffee mug, eyes softly
+    closed, a calm slight smile, soft morning light streaming through
+    the window, dust motes in the air, a small potted plant on the
+    sill, warm cream and golden tones, intimate cinematic photography,
+    shallow depth of field, no text, no watermark.
+  motion: >
+    A very subtle slow camera push-in, gentle steam rising from the
+    mug, soft light gradually shifting, calm and reverent, no people
+    moving, no camera shake.
+  kling_duration: 5
+
+duration: 13
+darken: 0.30
+
+text:
+  font: serif
+  size: 62
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord, thank You
+    for this morning.
+
+    Walk with me
+    through every
+    hour today.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/cece_winans_goodness_of_god.mp3"
+  volume: 0.32
+  start_at: 60      # chorus entry on most masters of this song
+  fade_in: 0.5
+
+output_dir: output/p2_lady_kitchen_morning

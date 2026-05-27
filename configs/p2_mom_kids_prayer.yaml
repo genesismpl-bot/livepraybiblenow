@@ -5,6 +5,7 @@
 # real/stock footage (AI humans, especially children's faces, can look uncanny).
 #   python prayer_reel_pipeline.py configs/p2_mom_kids_prayer.yaml
 slug: p2_mom_kids_prayer
+scene_slot: lady_mom_kids_bedroom_evening   # validator key — see scripts/validate_pillar2.py
 
 background:
   type: scene                    # Gemini still → Kling i2v motion
