@@ -1,0 +1,135 @@
+name: Render + publish reel
+
+# One-click full loop:
+#   pipeline + config + committed caption_file
+#     → render in CI
+#     → upload final.mp4 to R2
+#     → post the Reel to @livepraybible via the Graph API
+#
+# This is the "0 local machine" entry point. For scheduled (non-immediate)
+# posts, commit a row to configs/post_queue.yaml — the post_scheduler.yml
+# cron picks it up every 15 min.
+#
+# Caption is read from a file committed to the repo (workflow_dispatch
+# string inputs can't carry multi-line text cleanly). Convention:
+# scripts/captions/<slug>.txt.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline:
+        description: "Pipeline to run"
+        type: choice
+        default: prayer_reel_pipeline.py
+        options:
+          - prayer_reel_pipeline.py
+          - hook_pivot_pipeline.py
+      config:
+        description: "Config path (e.g. configs/p2_mom_kids_prayer.yaml)"
+        type: string
+        required: true
+        default: configs/p1_sky.yaml
+      caption_file:
+        description: "Caption file path (e.g. scripts/captions/p2_mom_kids_prayer.txt)"
+        type: string
+        required: true
+        default: scripts/captions/p1_sky.txt
+      share_to_feed:
+        description: "Also share to feed (in addition to Reels tab)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  render_and_publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ELEVENLABS_API_KEY:         ${{ secrets.ELEVENLABS_API_KEY }}
+      FAL_KEY:                    ${{ secrets.FAL_KEY }}
+      GEMINI_API_KEY:             ${{ secrets.GEMINI_API_KEY }}
+      R2_ACCOUNT_ID:              ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID:           ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY:       ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT:                ${{ secrets.R2_ENDPOINT }}
+      R2_BUCKET:                  ${{ secrets.R2_BUCKET }}
+      R2_PUBLIC_BASE_URL:         ${{ secrets.R2_PUBLIC_BASE_URL }}
+      IG_USER_ID:                 ${{ secrets.IG_USER_ID }}
+      INSTAGRAM_LONG_LIVED_TOKEN: ${{ secrets.INSTAGRAM_LONG_LIVED_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps (ffmpeg, rclone)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg rclone
+
+      - name: Install Python deps
+        run: pip install pyyaml python-dotenv requests google-genai
+
+      - name: Validate inputs
+        shell: bash
+        run: |
+          set -eo pipefail
+          [ -f "${{ inputs.config }}" ]       || { echo "::error::config not found: ${{ inputs.config }}"; exit 1; }
+          [ -f "${{ inputs.caption_file }}" ] || { echo "::error::caption file not found: ${{ inputs.caption_file }}"; exit 1; }
+          CHARS=$(wc -c < "${{ inputs.caption_file }}")
+          if [ "$CHARS" -gt 2200 ]; then
+            echo "::error::caption too long: $CHARS chars (IG max 2200)"; exit 1
+          fi
+          echo "caption: $CHARS chars"
+
+      - name: Render + upload to R2
+        id: render
+        shell: bash
+        run: |
+          set -eo pipefail
+          python "${{ inputs.pipeline }}" "${{ inputs.config }}" --upload-r2 2>&1 | tee run.log
+          URL=$(grep -oE 'https://[^[:space:]]+\.mp4' run.log | tail -1)
+          if [ -z "$URL" ]; then
+            echo "::error::no R2 URL detected in render output"; exit 1
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "rendered: $URL"
+
+      - name: Publish to Instagram
+        id: publish
+        shell: bash
+        run: |
+          set -eo pipefail
+          CAPTION=$(cat "${{ inputs.caption_file }}")
+          # post_to_instagram.py: share-to-feed is the default; pass --no-share-to-feed to opt out.
+          if [ "${{ inputs.share_to_feed }}" = "false" ]; then
+            SHARE_ARG="--no-share-to-feed"
+          else
+            SHARE_ARG=""
+          fi
+          python scripts/post_to_instagram.py \
+            --video-url "${{ steps.render.outputs.url }}" \
+            --caption "$CAPTION" \
+            $SHARE_ARG 2>&1 | tee post.log
+          PERMA=$(grep -oE '^PERMALINK=https?://[^[:space:]]+' post.log | head -1 | cut -d= -f2-)
+          MID=$(grep -oE 'media_id: [0-9]+' post.log | head -1 | awk '{print $2}')
+          echo "permalink=$PERMA" >> "$GITHUB_OUTPUT"
+          echo "media_id=$MID"   >> "$GITHUB_OUTPUT"
+
+      - if: always()
+        name: Write run summary
+        shell: bash
+        run: |
+          {
+            echo "### Render + publish result"
+            echo ""
+            echo "- **Pipeline:** \`${{ inputs.pipeline }}\`"
+            echo "- **Config:** \`${{ inputs.config }}\`"
+            echo "- **Caption file:** \`${{ inputs.caption_file }}\`"
+            echo "- **R2 URL:** ${{ steps.render.outputs.url }}"
+            echo "- **IG media_id:** ${{ steps.publish.outputs.media_id }}"
+            echo "- **IG permalink:** ${{ steps.publish.outputs.permalink }}"
+          } >> "$GITHUB_STEP_SUMMARY"
