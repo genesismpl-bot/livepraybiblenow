@@ -346,3 +346,43 @@ def upload_to_r2(local_path: str, key: str | None = None) -> str | None:
     url = f"{base}/{key}" if base else f"r2://{bucket}/{key}"
     print(f"  uploaded to R2: {url}")
     return url
+
+
+def download_from_r2(key: str, dest: str) -> str:
+    """Download an object from the R2 bucket via the S3 API (rclone).
+
+    Goes through the R2 S3 endpoint (NOT the public pub-*.r2.dev URL), so
+    works for objects that don't need to be publicly fetchable — e.g.
+    copyrighted music tracks we want to render with but not expose.
+
+    Required env: R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY,
+                  R2_ENDPOINT. Requires `rclone` on PATH.
+
+    Returns the local destination path. Raises on failure.
+    """
+    bucket   = os.environ.get("R2_BUCKET")
+    ak       = os.environ.get("R2_ACCESS_KEY_ID")
+    sk       = os.environ.get("R2_SECRET_ACCESS_KEY")
+    endpoint = os.environ.get("R2_ENDPOINT")
+    if not all([bucket, ak, sk, endpoint]):
+        raise RuntimeError(
+            "R2 env vars not set "
+            "(R2_BUCKET / R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY / R2_ENDPOINT)"
+        )
+    if shutil.which("rclone") is None:
+        raise RuntimeError("rclone not found on PATH")
+    env = dict(
+        os.environ,
+        RCLONE_CONFIG_R2DL_TYPE="s3",
+        RCLONE_CONFIG_R2DL_PROVIDER="Cloudflare",
+        RCLONE_CONFIG_R2DL_ACCESS_KEY_ID=ak,
+        RCLONE_CONFIG_R2DL_SECRET_ACCESS_KEY=sk,
+        RCLONE_CONFIG_R2DL_ENDPOINT=endpoint,
+    )
+    subprocess.run(
+        ["rclone", "copyto",
+         "--s3-no-check-bucket", "--no-update-modtime", "--s3-no-head",
+         f"r2dl:{bucket}/{key}", str(dest)],
+        env=env, check=True,
+    )
+    return str(dest)

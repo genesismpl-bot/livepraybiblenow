@@ -263,7 +263,31 @@ def build_reel(cfg: dict, raw: Path, work: Path) -> Path:
             else:
                 print(f"  music folder has no audio files: {folder}")
         else:
-            print(f"  music folder not found: {folder}")
+            # Local folder unavailable (e.g. running in CI). Fall back to
+            # downloading the rotated track from R2 via the private S3
+            # endpoint (NOT the public pub-*.r2.dev URL). The track list
+            # comes from chorus_offsets.yaml so the rotation is identical
+            # across local and cloud renders for the same slug.
+            offsets_path = ROOT / "assets" / "music" / "chorus_offsets.yaml"
+            if offsets_path.exists() and os.environ.get("R2_BUCKET"):
+                from lib.shared import download_from_r2
+                offsets = yaml.safe_load(offsets_path.read_text()) or {}
+                track_names = sorted(offsets.keys())
+                if track_names:
+                    idx = int(hashlib.md5(cfg["slug"].encode()).hexdigest(), 16) % len(track_names)
+                    name = track_names[idx]
+                    suffix = Path(name).suffix or ".mp3"
+                    dest = work / f"music_track{suffix}"
+                    try:
+                        download_from_r2(f"background music/{name}", str(dest))
+                        music = str(dest)
+                        print(f"  music (R2 rotation {idx + 1}/{len(track_names)}): {name}")
+                    except Exception as e:
+                        print(f"  R2 music download failed: {e}")
+                else:
+                    print(f"  chorus_offsets.yaml is empty; no music")
+            else:
+                print(f"  music folder not local and no R2 fallback: {folder}")
     args = ["-i", str(raw)]
     if music and Path(music).exists():
         mv       = float(music_cfg.get("volume", 0.18))
