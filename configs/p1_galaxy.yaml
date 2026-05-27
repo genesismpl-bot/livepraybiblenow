@@ -1,0 +1,42 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DVgH854DKU4 (sky → galaxy, soulful__trails._),
+# saved to assets/backgrounds/galaxy_sky.mp4.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_galaxy.yaml --upload-r2
+slug: p1_galaxy
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/backgrounds/galaxy_sky.mp4
+
+duration: 14          # 7.4s source slowed to 14s (cosmic slow-mo)
+darken: 0.20          # already dark; light darken keeps stars visible
+
+text:
+  font: serif
+  size: 70
+  align: center
+  position: center
+  color: white
+  lines: |
+    You set the stars
+    in place, Lord.
+
+    The same hands
+    that hold the galaxies
+    hold me.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+# No music — add a trending/worship audio in-app on Instagram.
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_galaxy

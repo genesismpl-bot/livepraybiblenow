@@ -140,7 +140,21 @@ def resolve_background(cfg: dict, work: Path) -> Path:
     bg = cfg["background"]
     btype = bg["type"]
     if btype == "video":
-        src = Path(bg["video"]).expanduser()
+        v = bg["video"]
+        # Support http(s) URLs — download once into the work dir and cache.
+        # This lets CI render configs whose source clips live on R2 instead
+        # of being committed to the repo (size + licensing).
+        if isinstance(v, str) and v.startswith(("http://", "https://")):
+            cache = work / "background_source.mp4"
+            if not cache.exists():
+                import urllib.request
+                cache.parent.mkdir(parents=True, exist_ok=True)
+                print(f"  downloading background: {v}")
+                urllib.request.urlretrieve(v, cache)
+            return cache
+        src = Path(v).expanduser()
+        if not src.is_absolute():
+            src = ROOT / src
         if not src.exists():
             raise FileNotFoundError(f"background.video not found: {src}")
         return src

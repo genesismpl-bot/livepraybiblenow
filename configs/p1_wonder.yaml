@@ -7,7 +7,7 @@ slug: p1_wonder
 
 background:
   type: video
-  video: assets/backgrounds/cosmic_boulevard.mp4
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/backgrounds/cosmic_boulevard.mp4
 
 duration: 14          # 7.2s source → 14s (~1.95x slow-mo, dreamy)
 darken: 0.25          # bright cosmic streaks; light darken keeps the colors

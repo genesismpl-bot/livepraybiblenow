@@ -1,0 +1,44 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DVdWB8OjcTx (Iceland: walking on black sand → snowy
+# mountain reveal at Vestrahorn/Stokksnes, megaamerican), saved to
+# assets/backgrounds/iceland_journey.mp4.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_journey.yaml --upload-r2
+slug: p1_journey
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/backgrounds/iceland_journey.mp4
+
+duration: 18          # 17.0s source → 18s (gentle slow-mo, uses full clip)
+darken: 0.30          # snow-bright midframe; bump darken for text contrast
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord,
+    You order
+    every step.
+
+    Even in the cold,
+    You walk
+    beside me.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+# No music — add a trending/worship audio in-app on Instagram.
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_journey
