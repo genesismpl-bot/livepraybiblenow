@@ -62,6 +62,39 @@ jobs:
       - name: Install Python deps
         run: pip install pyyaml python-dotenv requests google-genai
 
+      # If the config references a music file under assets/music/<name>.mp3
+      # that isn't committed, try to pull it from r2://<bucket>/music/<name>.mp3.
+      # Music files are copyrighted (Hillsong, Daigle, etc) so they live in R2,
+      # not the repo. Silent no-op if the config has no music or the file is
+      # already present.
+      - name: Install music from R2 (if needed)
+        shell: bash
+        run: |
+          set -eo pipefail
+          MUSIC_PATH=$(python -c "
+          import yaml, sys
+          cfg = yaml.safe_load(open('${{ inputs.config }}'))
+          print(((cfg or {}).get('music') or {}).get('path', '') or '')
+          ")
+          if [ -z "$MUSIC_PATH" ];          then echo "no music in config; skipping"; exit 0; fi
+          if [ -f "$MUSIC_PATH" ];          then echo "$MUSIC_PATH already present; skipping"; exit 0; fi
+          case "$MUSIC_PATH" in assets/music/*) ;; *)
+            echo "music path not under assets/music/; not fetching from R2"; exit 0;;
+          esac
+          mkdir -p "$(dirname "$MUSIC_PATH")"
+          FILENAME=$(basename "$MUSIC_PATH")
+          export RCLONE_CONFIG_R2_TYPE=s3
+          export RCLONE_CONFIG_R2_PROVIDER=Cloudflare
+          export RCLONE_CONFIG_R2_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID"
+          export RCLONE_CONFIG_R2_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY"
+          export RCLONE_CONFIG_R2_ENDPOINT="$R2_ENDPOINT"
+          echo "fetching r2:$R2_BUCKET/music/$FILENAME -> $MUSIC_PATH"
+          if rclone copyto "r2:$R2_BUCKET/music/$FILENAME" "$MUSIC_PATH"; then
+            echo "✓ music installed ($(du -h "$MUSIC_PATH" | cut -f1))"
+          else
+            echo "::warning::music fetch failed; render will continue without music"
+          fi
+
       - name: Render + upload to R2
         id: render
         run: |
