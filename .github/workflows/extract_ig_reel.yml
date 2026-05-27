@@ -1,0 +1,132 @@
+name: Extract IG reel → R2
+
+# Pulls a public Instagram reel via yt-dlp and uploads it to R2 under
+# `background videos/<filename>.mp4`, ready to drop into a Pillar 1
+# config as `background.video: <public URL>`.
+#
+# This removes the last local step from the autonomous loop: combined
+# with render_and_publish.yml, you can go from "saw a cool reel" to
+# "live on @livepraybible" without touching your Mac.
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Instagram reel URL (e.g. https://www.instagram.com/reel/DXwH55nu9fr/)"
+        type: string
+        required: true
+      filename:
+        description: "Target filename (no spaces, no extension — e.g. snowboard_sunset)"
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      R2_BUCKET:          ${{ secrets.R2_BUCKET }}
+      R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+      # rclone reads these directly to build an ephemeral remote, so no
+      # config file ever lands on disk and no secret hits the command line.
+      RCLONE_CONFIG_R2UP_TYPE:              s3
+      RCLONE_CONFIG_R2UP_PROVIDER:          Cloudflare
+      RCLONE_CONFIG_R2UP_ACCESS_KEY_ID:     ${{ secrets.R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_R2UP_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_R2UP_ENDPOINT:          ${{ secrets.R2_ENDPOINT }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install yt-dlp + rclone + ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone ffmpeg
+          pip install --upgrade yt-dlp
+
+      - name: Validate filename
+        shell: bash
+        run: |
+          set -eo pipefail
+          NAME="${{ inputs.filename }}"
+          if ! [[ "$NAME" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+            echo "::error::filename must match ^[a-zA-Z0-9_-]+$ (got: '$NAME')"
+            exit 1
+          fi
+          echo "filename: $NAME"
+
+      - name: Extract reel via yt-dlp
+        id: dl
+        shell: bash
+        run: |
+          set -eo pipefail
+          mkdir -p /tmp/igdl
+          NAME="${{ inputs.filename }}"
+          yt-dlp --no-warnings --no-playlist \
+            -o "/tmp/igdl/${NAME}.%(ext)s" \
+            --write-info-json \
+            --merge-output-format mp4 \
+            "${{ inputs.url }}"
+          OUT="/tmp/igdl/${NAME}.mp4"
+          if [ ! -f "$OUT" ]; then
+            # If yt-dlp couldn't merge to mp4, fall back to whatever it produced.
+            OUT=$(find /tmp/igdl -maxdepth 1 -type f -name "${NAME}.*" ! -name "*.json" ! -name "*.jpg" | head -1)
+          fi
+          [ -f "$OUT" ] || { echo "::error::no output file from yt-dlp"; exit 1; }
+          echo "out=$OUT" >> "$GITHUB_OUTPUT"
+          echo "=== ffprobe ==="
+          ffprobe -v error -select_streams v:0 \
+            -show_entries stream=codec_name,width,height,r_frame_rate \
+            -show_entries format=duration \
+            -of default=noprint_wrappers=1 "$OUT"
+
+      - name: Upload to R2 'background videos/' folder
+        id: upload
+        shell: bash
+        run: |
+          set -eo pipefail
+          NAME="${{ inputs.filename }}"
+          OUT="${{ steps.dl.outputs.out }}"
+          # Use .mp4 in the R2 key regardless of yt-dlp's source format.
+          KEY="background videos/${NAME}.mp4"
+          rclone copyto --s3-no-check-bucket --no-update-modtime --s3-no-head \
+            "$OUT" "r2up:${R2_BUCKET}/${KEY}"
+          # Construct the public URL with URL-encoded folder name.
+          URL="${R2_PUBLIC_BASE_URL%/}/background%20videos/${NAME}.mp4"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "public URL: $URL"
+
+      - name: Verify the URL serves
+        shell: bash
+        run: |
+          set -eo pipefail
+          URL="${{ steps.upload.outputs.url }}"
+          code=$(curl -s -o /dev/null -w '%{http_code}' "$URL")
+          echo "HTTP $code  $URL"
+          [ "$code" = "200" ] || { echo "::error::public URL did not return 200"; exit 1; }
+
+      - if: always()
+        name: Write run summary
+        shell: bash
+        run: |
+          {
+            echo "### Extracted IG reel → R2"
+            echo ""
+            echo "- **Source:** ${{ inputs.url }}"
+            echo "- **R2 key:** \`background videos/${{ inputs.filename }}.mp4\`"
+            echo "- **Public URL:** ${{ steps.upload.outputs.url }}"
+            echo ""
+            echo "Paste this into a Pillar 1 config:"
+            echo ""
+            echo '```yaml'
+            echo "background:"
+            echo "  type: video"
+            echo "  video: ${{ steps.upload.outputs.url }}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
