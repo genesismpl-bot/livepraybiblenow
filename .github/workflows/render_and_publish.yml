@@ -34,10 +34,6 @@ on:
         type: string
         required: true
         default: scripts/captions/p1_sky.txt
-      share_to_feed:
-        description: "Also share to feed (in addition to Reels tab)"
-        type: boolean
-        default: true
 
 permissions:
   contents: read
@@ -102,24 +98,41 @@ jobs:
 
       - name: Publish to Instagram
         id: publish
+        env:
+          VIDEO_URL:    ${{ steps.render.outputs.url }}
+          CAPTION_FILE: ${{ inputs.caption_file }}
         shell: bash
         run: |
           set -eo pipefail
-          CAPTION=$(cat "${{ inputs.caption_file }}")
-          # post_to_instagram.py: share-to-feed is the default; pass --no-share-to-feed to opt out.
-          if [ "${{ inputs.share_to_feed }}" = "false" ]; then
-            SHARE_ARG="--no-share-to-feed"
-          else
-            SHARE_ARG=""
-          fi
-          python scripts/post_to_instagram.py \
-            --video-url "${{ steps.render.outputs.url }}" \
-            --caption "$CAPTION" \
-            $SHARE_ARG 2>&1 | tee post.log
+          # Use the canonical IG-Login publisher (lib/instagram.py → graph.instagram.com).
+          # post_to_instagram.py was removed in PR #7 — it hit the wrong API endpoint.
+          python <<'PY' | tee post.log
+          import os, sys, requests
+          sys.path.insert(0, '.')
+          from lib.instagram import post_reel
+
+          url     = os.environ['VIDEO_URL']
+          caption = open(os.environ['CAPTION_FILE']).read().rstrip()
+          result  = post_reel(url, caption)
+          mid     = result['media_id']
+          print(f"MEDIA_ID={mid}")
+
+          # Fetch the public permalink for the run summary
+          token = os.environ['INSTAGRAM_LONG_LIVED_TOKEN']
+          r = requests.get(
+              f"https://graph.instagram.com/v21.0/{mid}",
+              params={"fields": "permalink", "access_token": token},
+              timeout=20,
+          )
+          if r.ok:
+              perma = r.json().get("permalink", "")
+              if perma:
+                  print(f"PERMALINK={perma}")
+          PY
           PERMA=$(grep -oE '^PERMALINK=https?://[^[:space:]]+' post.log | head -1 | cut -d= -f2-)
-          MID=$(grep -oE 'media_id: [0-9]+' post.log | head -1 | awk '{print $2}')
+          MID=$(grep -oE '^MEDIA_ID=[0-9]+' post.log | head -1 | cut -d= -f2-)
           echo "permalink=$PERMA" >> "$GITHUB_OUTPUT"
-          echo "media_id=$MID"   >> "$GITHUB_OUTPUT"
+          echo "media_id=$MID"    >> "$GITHUB_OUTPUT"
 
       - if: always()
         name: Write run summary
