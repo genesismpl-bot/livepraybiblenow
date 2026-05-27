@@ -40,7 +40,9 @@ jobs:
 
       - id: post
         name: Post Reel to Instagram
+        shell: bash
         run: |
+          set -eo pipefail
           python scripts/post_to_instagram.py \
             --video-url "${{ inputs.video_url }}" \
             --caption "${{ inputs.caption }}" 2>&1 | tee post.log
