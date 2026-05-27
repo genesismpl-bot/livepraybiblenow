@@ -47,15 +47,23 @@ FAL_NEG_PROMPT = (
 )
 
 SANS_FONTS = [
+    # macOS
     "/System/Library/Fonts/Supplemental/Arial.ttf",
     "/Library/Fonts/Arial.ttf",
     "/System/Library/Fonts/Helvetica.ttc",
+    # Linux (Ubuntu CI runners + most distros)
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
 ]
 SERIF_FONTS = [
+    # macOS
     "/System/Library/Fonts/Supplemental/Georgia.ttf",
     "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
     "/Library/Fonts/Georgia.ttf",
     "/System/Library/Fonts/Times.ttc",
+    # Linux (Ubuntu CI runners + most distros)
+    "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
 ]
 
 

@@ -54,10 +54,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install system deps (ffmpeg, rclone)
+      - name: Install system deps (ffmpeg, rclone, fonts)
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg rclone
+          sudo apt-get install -y ffmpeg rclone fonts-liberation
 
       - name: Install Python deps
         run: pip install pyyaml python-dotenv requests google-genai
