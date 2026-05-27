@@ -27,12 +27,19 @@ posts:
   video: output/p1_wonder/final.mp4
   video_url: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/p1_wonder.mp4
   scheduled_at: '2026-05-27T09:00:00+00:00'
-  caption: |
-    What if heaven were always this close? 🌌
+  caption: 'What if heaven were always this close? 🌌
+
 
     Lord, open my eyes to see Your wonders in the ordinary. Amen.
 
+
     🙏 Save this for a day you need the reminder. Type AMEN if you receive it.
 
+
     #prayer #faith #jesus #christian #dailyprayer #christianreels #wonder #godiswonderful #pray #scripture
-  status: queued
+
+    '
+  status: posted
+  container_id: '18128974876547429'
+  posted_at: '2026-05-27T09:48:34.388190+00:00'
+  media_id: '18130572736517391'
