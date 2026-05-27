@@ -1,0 +1,53 @@
+# Pillar 2 — close-up of a woman's hands resting on an open bible.
+slug: p2_lady_bible_table
+scene_slot: lady_bible_table
+
+background:
+  type: scene
+  scene: >
+    A tight intimate close-up of a young woman's hands resting on an
+    open leather-bound bible on a warm wooden table, a thin gold ring
+    on one finger, soft white window light from the side, a single
+    small dried flower beside the bible, the pages slightly worn and
+    well-loved, gentle shadows, only her hands and forearms visible,
+    quiet reverent mood, cinematic photography, shallow depth of
+    field, no text, no watermark.
+  motion: >
+    A very subtle slow camera push-in toward the bible, the page edge
+    softly lifted by an imperceptible breath of air, soft light
+    gradually shifting across the page, calm and reverent, no jarring
+    movement, no camera shake.
+  kling_duration: 5
+
+duration: 13
+darken: 0.28
+
+text:
+  font: serif
+  size: 62
+  align: center
+  position: center
+  color: white
+  lines: |
+    Open my eyes,
+    Lord, to see
+    Your truth.
+
+    Let Your word
+    be a lamp
+    to my feet.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/anne_wilson_my_jesus.mp3"
+  volume: 0.32
+  start_at: 50
+  fade_in: 0.5
+
+output_dir: output/p2_lady_bible_table

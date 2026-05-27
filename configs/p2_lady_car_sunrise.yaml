@@ -1,0 +1,52 @@
+# Pillar 2 — young woman in her car at sunrise, praying before her day.
+slug: p2_lady_car_sunrise
+scene_slot: lady_car_sunrise
+
+background:
+  type: scene
+  scene: >
+    A young woman in her late twenties seated in the driver's seat of
+    a car, both hands resting on the steering wheel, head softly
+    bowed, eyes closed in a quiet prayer, warm golden sunrise light
+    pouring through the windshield, soft lens flare, a thin gold cross
+    necklace at her collarbone, calm and resolved expression, intimate
+    cinematic photography, shallow depth of field, no text, no
+    watermark.
+  motion: >
+    A very subtle slow camera push-in, the sunrise light gradually
+    growing, gentle warm flares shifting across the dashboard, calm
+    and steady, she does not move, no camera shake.
+  kling_duration: 5
+
+duration: 13
+darken: 0.32
+
+text:
+  font: serif
+  size: 62
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord, go before me
+    today.
+
+    Give me strength
+    for what is ahead,
+    and peace for
+    what is unknown.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  path: "assets/music/phil_wickham_house_of_the_lord.mp3"
+  volume: 0.32
+  start_at: 30      # main hook lands early in this track
+  fade_in: 0.5
+
+output_dir: output/p2_lady_car_sunrise

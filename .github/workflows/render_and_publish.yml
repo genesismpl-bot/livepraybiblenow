@@ -83,6 +83,17 @@ jobs:
           fi
           echo "caption: $CHARS chars"
 
+      # Pillar 2 pre-publish gate (fires before Render so we don't burn Kling
+      # credits on a config that will be rejected). Enforces:
+      #   - scene must depict a lady
+      #   - scene_slot must be unique across configs/p2_*.yaml
+      #   - music.path must rotate vs. the last posted Pillar 2 reel
+      # See memory: feedback_pillar2_constraints.md
+      - name: Validate Pillar 2 constraints
+        if: inputs.pipeline == 'prayer_reel_pipeline.py' && startsWith(inputs.config, 'configs/p2_')
+        shell: bash
+        run: python scripts/validate_pillar2.py "${{ inputs.config }}"
+
       - name: Render + upload to R2
         id: render
         shell: bash
