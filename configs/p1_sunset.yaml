@@ -6,7 +6,7 @@ slug: p1_sunset
 
 background:
   type: video
-  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/backgrounds/sunset_reel.mp4
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/sunset_reel.mp4
 
 duration: 14          # 9.7s source slowed to 14s (gentle ~1.44x slow-mo)
 darken: 0.30          # sunset is bright; bump darken so white text reads

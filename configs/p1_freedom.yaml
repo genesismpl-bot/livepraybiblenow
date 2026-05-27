@@ -1,0 +1,40 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DXwH55nu9fr (snowboarder carving at sunset, liz_6),
+# saved to R2 as `background videos/snowboard_sunset.mp4`.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_freedom.yaml --upload-r2
+slug: p1_freedom
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/snowboard_sunset.mp4
+
+duration: 14          # 8.5s source slowed to 14s (gentle ~1.65x slow-mo)
+darken: 0.30          # bright pink/snow midframe; bump darken for white text
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    With You, Lord,
+    I run free.
+
+    You paint the sky
+    just to remind me
+    how loved I am.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_freedom

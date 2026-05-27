@@ -7,7 +7,7 @@ slug: p1_galaxy
 
 background:
   type: video
-  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/backgrounds/galaxy_sky.mp4
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/galaxy_sky.mp4
 
 duration: 14          # 7.4s source slowed to 14s (cosmic slow-mo)
 darken: 0.20          # already dark; light darken keeps stars visible
