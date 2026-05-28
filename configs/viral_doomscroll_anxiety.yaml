@@ -1,0 +1,57 @@
+# Pillar 3 (viral hook + CTA) — ANXIETY → PEACE theme. Pivot B.
+# Hook: r2://livepraybible/hooks/DXQgG3rAN8f.mp4 (6.0s source, full clip).
+slug: viral_doomscroll_anxiety
+
+hook:
+  source: "https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/hooks/DXQgG3rAN8f.mp4"
+  start:  0.0
+  end:    6.0
+
+script: |
+  Stop *doomscrolling*.
+  When's the last time you *prayed*?
+  Lord, my mind is *racing*.
+  Quiet every fear.
+  Replace anxiety with
+  Your *peace*.
+  Amen.
+
+still_path: assets/stills/candle_dark.png
+
+motion:
+  type:     ken_burns_slow_zoom
+  zoom_to:  1.08
+  duration: 12.0
+
+voice:
+  voice_id:   "alFofuDn3cOwyoz1i44T"
+  stability:  0.50
+  similarity: 0.80
+  style:      0.35
+  apply_phone_mic_filter: false
+
+captions:
+  style:           source_match
+  mode:            sentence
+  font_size:       84
+  margin_v:        0
+  alignment:       5
+  colour:          "#FFFFFF"
+  emphasis_colour: "#FFD700"
+  chunk_size:      4
+
+cta:
+  text:     "Follow @livepraybible for a prayer every day"
+  duration: 1.5
+  fade_in:  0.4
+  y_frac:   0.78
+  font_size: 64
+
+music:
+  path:     "assets/music/soft_piano_prayer.mp3"
+  volume:   0.15
+  fade_in:  1.0
+  fade_out: 1.5
+
+variants:   1
+output_dir: output/viral_doomscroll_anxiety
