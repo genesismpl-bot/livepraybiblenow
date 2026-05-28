@@ -128,9 +128,34 @@ def trim_hook(cfg: dict, work: Path) -> Path:
         print(f"  hook.mp4 exists ({get_duration(str(out)):.2f}s), skipping")
         return out
 
-    src = Path(cfg["hook"]["source"]).expanduser()
-    if not src.exists():
-        raise FileNotFoundError(f"hook source not found: {src}")
+    raw_src = cfg["hook"]["source"]
+    # Support http(s) URLs — download once into the work dir and cache.
+    # Mirrors the pattern in prayer_reel_pipeline.py:resolve_background()
+    # for background.video. Lets configs point at R2-hosted hook clips
+    # (r2://livepraybible/hooks/<ig-shortcode>.mp4) instead of needing the
+    # file present per-machine.
+    if isinstance(raw_src, str) and raw_src.startswith(("http://", "https://")):
+        src = work / "hook_source.mp4"
+        if not src.exists():
+            import requests
+            src.parent.mkdir(parents=True, exist_ok=True)
+            print(f"  downloading hook source: {raw_src}")
+            # Use a real UA — Cloudflare R2.dev returns 403 for the default
+            # python-urllib/python-requests UAs.
+            r = requests.get(
+                raw_src,
+                headers={"User-Agent": "Mozilla/5.0 livepraybible-pipeline/1.0"},
+                stream=True, timeout=120, allow_redirects=True,
+            )
+            r.raise_for_status()
+            with open(src, "wb") as f:
+                for chunk in r.iter_content(64 * 1024):
+                    if chunk:
+                        f.write(chunk)
+    else:
+        src = Path(raw_src).expanduser()
+        if not src.exists():
+            raise FileNotFoundError(f"hook source not found: {src}")
 
     start = float(cfg["hook"]["start"])
     end = float(cfg["hook"]["end"])
