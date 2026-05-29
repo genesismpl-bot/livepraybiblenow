@@ -5,18 +5,19 @@ scene_slot: lady_garden_dusk
 background:
   type: scene
   scene: >
-    A woman in her forties kneeling on a soft cloth in a quiet
-    backyard garden at dusk, both hands gently in the dark soil
-    between rows of small flowering plants, head softly bowed, a calm
-    reflective expression, warm golden-hour light from low on the
-    horizon, soft purple sky behind, fireflies just beginning,
+    A woman in her forties kneeling alone on a soft cloth in a quiet
+    backyard garden at dusk, photographed from behind so her face is
+    not visible, head bowed deeply, hands cradling her face in prayer,
+    shoulders trembling as she weeps quietly, dark soil and small
+    flowering plants around her, warm golden-hour light from low on
+    the horizon, soft purple sky behind, fireflies just beginning,
     intimate cinematic photography, shallow depth of field, no text,
     no watermark.
   motion: >
-    A very subtle slow camera push-in, the warm sky gradually
-    deepening to purple, the smallest movement of leaves in the
-    background, calm and reverent, she does not move, no camera
-    shake.
+    A very subtle slow camera push-in from behind her, the warm sky
+    gradually deepening to purple, the smallest movement of leaves
+    in the background, her shoulders just barely trembling, calm and
+    reverent, no camera shake.
   kling_duration: 5
 
 duration: 13

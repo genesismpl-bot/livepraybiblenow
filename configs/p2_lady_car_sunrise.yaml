@@ -5,17 +5,20 @@ scene_slot: lady_car_sunrise
 background:
   type: scene
   scene: >
-    A young woman in her late twenties seated in the driver's seat of
-    a car, both hands resting on the steering wheel, head softly
-    bowed, eyes closed in a quiet prayer, warm golden sunrise light
-    pouring through the windshield, soft lens flare, a thin gold cross
-    necklace at her collarbone, calm and resolved expression, intimate
-    cinematic photography, shallow depth of field, no text, no
-    watermark.
+    A young woman in her late twenties seated alone in the driver's
+    seat of a car, head bowed against the top rim of the steering
+    wheel, long hair falling forward to cover her face, both hands
+    clasped tightly together on the wheel as she prays, silent tears
+    streaming down behind the curtain of her hair, shoulders heavy,
+    warm golden sunrise light pouring through the windshield, soft
+    lens flare, a thin gold cross necklace at her collarbone, face
+    obscured by her hair, intimate cinematic photography, shallow
+    depth of field, no text, no watermark.
   motion: >
     A very subtle slow camera push-in, the sunrise light gradually
-    growing, gentle warm flares shifting across the dashboard, calm
-    and steady, she does not move, no camera shake.
+    growing, gentle warm flares shifting across the dashboard, a
+    single tear sliding into view from behind her hair, calm and
+    steady, she does not move, no camera shake.
   kling_duration: 5
 
 duration: 13
