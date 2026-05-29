@@ -6,16 +6,19 @@ scene_slot: lady_kitchen_morning   # uniqueness key for the Pillar 2 validator
 background:
   type: scene
   scene: >
-    A woman in her early thirties standing at a sunlit kitchen window,
-    both hands wrapped around a warm ceramic coffee mug, eyes softly
-    closed, a calm slight smile, soft morning light streaming through
-    the window, dust motes in the air, a small potted plant on the
-    sill, warm cream and golden tones, intimate cinematic photography,
-    shallow depth of field, no text, no watermark.
+    A woman in her early thirties standing alone at a sunlit kitchen
+    window, both hands cradling her face, fingers covering her eyes
+    as she prays, tears running down her cheeks between her fingers,
+    head bowed, shoulders softened, a coffee mug forgotten on the
+    counter beside her, soft morning light streaming through the
+    window, warm cream and golden tones, face mostly obscured by her
+    hands, intimate cinematic photography, shallow depth of field,
+    no text, no watermark.
   motion: >
-    A very subtle slow camera push-in, gentle steam rising from the
-    mug, soft light gradually shifting, calm and reverent, no people
-    moving, no camera shake.
+    A very subtle slow camera push-in toward her hands, a single
+    tear slowly tracing down between her fingers, soft light
+    gradually shifting, calm and reverent, she does not move her
+    body, no camera shake.
   kling_duration: 5
 
 duration: 13

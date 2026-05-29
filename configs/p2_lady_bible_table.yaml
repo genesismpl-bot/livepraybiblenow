@@ -5,18 +5,20 @@ scene_slot: lady_bible_table
 background:
   type: scene
   scene: >
-    A tight intimate close-up of a young woman's hands resting on an
-    open leather-bound bible on a warm wooden table, a thin gold ring
-    on one finger, soft white window light from the side, a single
-    small dried flower beside the bible, the pages slightly worn and
-    well-loved, gentle shadows, only her hands and forearms visible,
-    quiet reverent mood, cinematic photography, shallow depth of
-    field, no text, no watermark.
+    A tight intimate close-up of a young woman's trembling hands
+    clasped together over an open leather-bound bible on a warm
+    wooden table, a thin gold ring on one finger, head bowed at the
+    top of the frame so her face is not visible, a single tear
+    falling onto the open page below her hands, soft white window
+    light from the side, the pages slightly worn and well-loved,
+    gentle shadows, she is praying, only her hands and the bowed
+    crown of her head visible, quiet reverent mood, cinematic
+    photography, shallow depth of field, no text, no watermark.
   motion: >
-    A very subtle slow camera push-in toward the bible, the page edge
-    softly lifted by an imperceptible breath of air, soft light
-    gradually shifting across the page, calm and reverent, no jarring
-    movement, no camera shake.
+    A very subtle slow camera push-in toward her hands, the tear
+    slowly spreading on the page, soft light gradually shifting
+    across the bible, calm and reverent, no jarring movement, no
+    camera shake.
   kling_duration: 5
 
 duration: 13

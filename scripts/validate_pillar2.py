@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Pre-publish gate for Pillar 2 (person-praying) reels.
 
-Enforces three user-locked constraints before a Pillar 2 reel is posted:
+Enforces four user-locked constraints before a Pillar 2 reel is posted:
 
   1. The scene must depict a LADY (woman/mother/girl/etc.).
-  2. The scene_slot tag must be UNIQUE across all committed
+  2. She must be CRYING AND PRAYING (added 2026-05-28).
+  3. The scene_slot tag must be UNIQUE across all committed
      configs/p2_*.yaml files (and the scene prompt must not match any
      other p2 config verbatim).
-  3. Music must ROTATE — the music.path must not equal the most recent
+  4. Music must ROTATE — the music.path must not equal the most recent
      posted Pillar 2 entry's music.path in configs/post_queue.yaml.
 
 Usage:
@@ -44,6 +45,28 @@ LADY_PATTERN = re.compile(
     r"\b(" + "|".join(LADY_WORDS) + r")\b", re.IGNORECASE
 )
 
+# Words that indicate the scene depicts crying / tears.
+CRY_WORDS = [
+    "crying", "cries", "cried", "tear", "tears", "teardrop", "teardrops",
+    "tearful", "weeping", "weeps", "wept", "sobbing", "sobs", "sobbed",
+    "teary", "wet cheeks", "eyes wet", "tear-streaked", "tearstained",
+]
+CRY_PATTERN = re.compile(
+    r"\b(" + "|".join(w.replace(" ", r"\s+") for w in CRY_WORDS) + r")\b",
+    re.IGNORECASE,
+)
+
+# Words that indicate the scene depicts praying / prayer.
+PRAY_WORDS = [
+    "praying", "prays", "prayed", "prayer", "head bowed", "hands folded",
+    "hands clasped", "hands cradling", "eyes closed", "in supplication",
+    "kneeling in prayer",
+]
+PRAY_PATTERN = re.compile(
+    r"\b(" + "|".join(w.replace(" ", r"\s+") for w in PRAY_WORDS) + r")\b",
+    re.IGNORECASE,
+)
+
 
 def normalise_scene(text: str) -> str:
     """Collapse whitespace so two prompts that differ only by formatting
@@ -65,6 +88,24 @@ def check_lady(cfg: dict) -> list[str]:
             f"Tried: {LADY_WORDS}"
         ]
     return []
+
+
+def check_crying_and_praying(cfg: dict) -> list[str]:
+    """Pillar 2 lady must be both crying AND praying (locked 2026-05-28).
+    Faces should be obscured — that's a soft recommendation, not enforced."""
+    scene = (cfg.get("background") or {}).get("scene", "")
+    errs: list[str] = []
+    if not CRY_PATTERN.search(scene):
+        errs.append(
+            "scene does not depict crying — Pillar 2 lady must be crying "
+            "AND praying. Add one of: " + ", ".join(CRY_WORDS[:8]) + " …"
+        )
+    if not PRAY_PATTERN.search(scene):
+        errs.append(
+            "scene does not depict praying — Pillar 2 lady must be crying "
+            "AND praying. Add one of: " + ", ".join(PRAY_WORDS[:6]) + " …"
+        )
+    return errs
 
 
 def check_unique_scene(cfg: dict, this_path: Path) -> list[str]:
@@ -152,12 +193,14 @@ def validate(path: Path) -> int:
 
     errors: list[str] = []
     errors += check_lady(cfg)
+    errors += check_crying_and_praying(cfg)
     errors += check_unique_scene(cfg, path)
     errors += check_music_rotation(cfg)
 
     print(f"validate_pillar2: {path.name}")
     if not errors:
         print("  ✓ subject is a lady")
+        print("  ✓ lady is crying AND praying")
         print("  ✓ scene_slot is unique")
         print("  ✓ music rotates")
         return 0

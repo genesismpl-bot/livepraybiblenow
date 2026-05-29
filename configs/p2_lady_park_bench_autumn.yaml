@@ -5,17 +5,20 @@ scene_slot: lady_park_bench_autumn
 background:
   type: scene
   scene: >
-    An older woman in her sixties seated on a weathered wooden park
-    bench, wearing a soft knit cardigan, hands folded peacefully in
-    her lap, eyes gently closed in prayer, scattered autumn leaves on
-    the ground around her, warm amber and gold autumn trees softly
-    blurred behind, late afternoon sunlight, calm dignified expression,
-    intimate cinematic photography, shallow depth of field, no text,
-    no watermark.
+    An older woman in her sixties seated alone on a weathered wooden
+    park bench, photographed from behind and slightly to the side so
+    her face is not visible, wearing a soft knit cardigan, shoulders
+    quietly trembling as she weeps in prayer, hands clasped tightly
+    in her lap, head bowed forward, tears falling onto her folded
+    hands, scattered autumn leaves on the ground around her, warm
+    amber and gold autumn trees softly blurred behind, late afternoon
+    sunlight, intimate cinematic photography, shallow depth of field,
+    no text, no watermark.
   motion: >
     Very gentle leaves drifting down in the background, a very slow
-    cinematic push-in toward her, soft light slowly shifting, calm
-    and serene, she does not move, no camera shake.
+    cinematic push-in from behind her, soft light slowly shifting,
+    her shoulders barely trembling, she does not turn, no camera
+    shake.
   kling_duration: 5
 
 duration: 13
