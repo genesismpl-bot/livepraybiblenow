@@ -1,0 +1,44 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DXb3nkjjEj5 (cherry-blossom staircase with
+# falling petals, _euphoria_____0). Caption ref: "Hope isn't loud."
+# Saved to R2 as `background videos/cherry_blossom_stairs.mp4`.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_hope.yaml --upload-r2
+slug: p1_hope
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/cherry_blossom_stairs.mp4
+
+duration: 14          # 7.1s source slowed to 14s (gentle ~2x for cherry-blossom drift)
+darken: 0.30          # bright pinks/whites; bump darken for white text contrast
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord,
+    when hope feels far,
+    remind me:
+
+    Your mercies are new
+    every morning.
+
+    I will rise again
+    with You.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_hope
