@@ -468,8 +468,12 @@ def build_payload(
 
     vf = f"ass='{cap_path_esc}'{drawtext}"
 
-    # loudnorm brings VO to TikTok/Reels target loudness (-14 LUFS) so it
-    # doesn't get drowned by the loud auto-captioned hook segment.
+    # VO gain. Previously used single-pass loudnorm (I=-14 LUFS) which
+    # introduced ~400–700 ms of lookahead delay → audio fell BEHIND the
+    # caption timestamps (timestamps come from the un-normalised
+    # ElevenLabs VO). Simple volume gain keeps the captions in sync; we
+    # rely on IG's auto-loudness-normalisation server-side.
+    voice_gain = float(cfg.get("voice", {}).get("gain", 1.4))
     music_cfg = cfg.get("music", {}) or {}
     music_path = music_cfg.get("path")
     if music_path:
@@ -487,7 +491,7 @@ def build_payload(
         fade_out_start = max(0.0, total_dur - m_fo)
         filter_complex = (
             f"[0:v]{vf}[v];"
-            f"[1:a]loudnorm=I=-14:LRA=11:TP=-1.5[voice];"
+            f"[1:a]volume={voice_gain:.3f}[voice];"
             f"[2:a]aloop=loop=-1:size=2e9,atrim=0:{total_dur:.3f},"
             f"volume={mv:.3f},"
             f"afade=t=in:st=0:d={m_fi:.3f},"
@@ -508,10 +512,10 @@ def build_payload(
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             str(out),
         ])
-        print(f"  payload built ({total_dur:.2f}s, captions burned, CTA at {cta_start:.2f}s, music bed @ volume={mv})")
+        print(f"  payload built ({total_dur:.2f}s, captions burned, CTA at {cta_start:.2f}s, voice gain={voice_gain}, music bed @ volume={mv})")
         return out
 
-    af = "loudnorm=I=-14:LRA=11:TP=-1.5"
+    af = f"volume={voice_gain:.3f}"
 
     run_ffmpeg([
         "-i", str(still_motion),
@@ -525,7 +529,7 @@ def build_payload(
         "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
         str(out),
     ])
-    print(f"  payload built ({total_dur:.2f}s, captions burned, CTA at {cta_start:.2f}s, loudnorm applied)")
+    print(f"  payload built ({total_dur:.2f}s, captions burned, CTA at {cta_start:.2f}s, voice gain={voice_gain})")
     return out
 
 
