@@ -1,0 +1,46 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DI9h5G6NNWc (fovlife) — fierce storm from a
+# ship's deck looking out at a dark island under churning clouds.
+# Original caption: "Your journey may be heavy with storms now…"
+# Recontextualised as Psalm 46:1 + Mark 4:38-40 — God in the boat with us.
+# Saved to R2 as `background videos/storm_at_sea.mp4`.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_storm.yaml --upload-r2
+slug: p1_storm
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/storm_at_sea.mp4
+
+duration: 14          # 10.1s source slowed to 14s (gentle ~1.39x)
+darken: 0.15          # already moody/dark — light darken keeps the storm visible
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord,
+    even when
+    the storms rage,
+
+    You are my refuge.
+    You are my strength.
+
+    You are with me
+    in the boat.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_storm
