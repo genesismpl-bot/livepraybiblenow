@@ -1,0 +1,44 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DXp8MDqERBH (surreal dark planet with rings over
+# stylized blue clouds + moonlit sea, darkssiren). Recontextualised for a
+# "God is bigger than I can see" prayer.
+# Saved to R2 as `background videos/cosmic_planet.mp4`.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_mystery.yaml --upload-r2
+slug: p1_mystery
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/cosmic_planet.mp4
+
+duration: 14          # 10.5s source slowed to 14s (gentle ~1.34x)
+darken: 0.20          # already dark/blue — light darken preserves the cosmic palette
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    God,
+    You are bigger
+    than I can see.
+
+    When mystery
+    feels too vast,
+    let me rest
+    in Your knowing.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_mystery
