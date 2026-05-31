@@ -1,0 +1,47 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DXTb_rhDFhU (ulas.sky) — aerial of wild horses
+# running across the Kazakh steppe at sunset. Caption ref:
+# "Endless freedom across the Kazakh steppe."
+# Recontextualised as Psalm 27:13 — seeing God's goodness in the land
+# of the living.
+# Saved to R2 as `background videos/kazakh_horses.mp4`.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_goodness.yaml --upload-r2
+slug: p1_goodness
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/kazakh_horses.mp4
+
+duration: 15          # 15s source — no slow-mo, preserves the full aerial
+darken: 0.25          # bright sunset/sky; medium darken for white text
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    God,
+    let me see
+    Your goodness
+
+    in the land
+    of the living.
+
+    Even today.
+    Especially today.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_goodness
