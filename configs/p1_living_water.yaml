@@ -1,0 +1,46 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DVtqvvdDwCk (dronolphy / Arun P Jose) — massive
+# waterfall cascading into a green valley at Kalu, Maharashtra, with a
+# single tiny figure sitting on the cliff edge.
+# Original caption: "Alone… no network, but full connection with nature."
+# Recontextualised as John 7:37-38 — streams of living water.
+# Saved to R2 as `background videos/kalu_waterfall.mp4`.
+# Note: third-party footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_living_water.yaml --upload-r2
+slug: p1_living_water
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/kalu_waterfall.mp4
+
+duration: 14          # 13s source → 14s (~1.07x, barely any slow-mo)
+darken: 0             # per request: no color filter — keep the lush greens / waterfall pure.
+                      # The drawtext shadow handles text readability.
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    Jesus,
+    You are
+    my living water.
+
+    When I am dry,
+    fill me again
+    from Your overflow.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_living_water
