@@ -118,6 +118,25 @@ def detect_branch() -> str:
     return out(["git", "branch", "--show-current"])
 
 
+def auto_caption(prayer: str) -> str:
+    """Auto-derive an IG caption from prayer text — hook + prayer + CTA + tags."""
+    lines = [ln.strip() for ln in prayer.strip().splitlines() if ln.strip()]
+    if not lines:
+        sys.exit("✗ prayer is empty — can't auto-derive caption")
+    # Hook = first two non-blank lines joined, or just first if it ends with a period.
+    hook = lines[0]
+    if len(lines) > 1 and not hook.endswith((".", "!", "?")):
+        hook = f"{hook} {lines[1]}"
+    body = prayer.strip()
+    tags = "#prayer #faith #jesus #christian #dailyprayer #christianreels #pray"
+    return (
+        f"{hook} ✨\n\n"
+        f"{body}\n\n"
+        f"🙏 Save this for when you need it. Type AMEN if you receive it.\n\n"
+        f"{tags}\n"
+    )
+
+
 # ── steps ────────────────────────────────────────────────────────────
 def step_extract(url: str) -> Path:
     """yt-dlp the reel into TMP_DIR and return the .mp4 path."""
@@ -352,12 +371,21 @@ def main() -> int:
                     help="trigger Render + publish workflow after merge")
     ap.add_argument("--watch", action="store_true",
                     help="wait for the workflow and print the IG permalink")
+    ap.add_argument("--go", action="store_true",
+                    help="shorthand for --publish --watch (one-shot)")
     args = ap.parse_args()
 
     prayer  = read_text(args.prayer_file) or args.prayer
     caption = read_text(args.caption_file) or args.caption
-    if not prayer or not caption:
-        sys.exit("✗ --prayer/--prayer-file AND --caption/--caption-file are required")
+    if not prayer:
+        sys.exit("✗ --prayer / --prayer-file is required")
+    if not caption:
+        caption = auto_caption(prayer)
+        print("  caption: auto-derived from prayer\n")
+
+    if args.go:
+        args.publish = True
+        args.watch   = True
 
     if not args.slug.startswith("p1_"):
         print(f"⚠ slug doesn't start with 'p1_': {args.slug}", file=sys.stderr)
