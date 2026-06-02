@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# scripts/p1 — convenience wrapper that runs scripts/p1.py with the repo's venv.
+#
+# Usage:
+#   scripts/p1 URL SLUG --prayer-file prayer.txt --caption-file caption.txt --publish --watch
+#
+# See scripts/p1.py --help for all options.
+
+set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+PY="${REPO_ROOT}/.venv/bin/python"
+if [[ ! -x "${PY}" ]]; then
+  # fall back to system python3 if venv is missing — the script's deps
+  # (argparse, subprocess, etc.) are all stdlib.
+  PY="$(command -v python3)"
+fi
+
+exec "${PY}" "${REPO_ROOT}/scripts/p1.py" "$@"
