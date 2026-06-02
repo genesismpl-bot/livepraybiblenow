@@ -1,0 +1,50 @@
+# Pillar 1 — uses an EXISTING vertical reel as the background.
+# Source: Instagram reel DY-HEjLIO6O (orvaxisworld) — AI-rendered
+# tropical beach at night with neon-pink/blue aurora, crescent moon,
+# glowing lanterns and luminescent purple waves.
+# Original caption: "A shoreline painted with starlight and dreams."
+# Recontextualised as Psalm 139:11-12 — "even the night shines as the day."
+# Saved to R2 as `background videos/starlit_shore.mp4`.
+# Note: third-party (AI-generated) footage; verify licensing before commercial use.
+#   python prayer_reel_pipeline.py configs/p1_night_shines.yaml --upload-r2
+slug: p1_night_shines
+
+background:
+  type: video
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/starlit_shore.mp4
+
+duration: 14          # 10s source slowed to 14s (gentle ~1.4x slow-mo)
+darken: 0             # per request: no colour filter — preserve the vivid neon palette.
+                      # drawtext shadow handles text readability against the bright sky.
+
+text:
+  font: serif
+  size: 68
+  align: center
+  position: center
+  color: white
+  lines: |
+    Lord,
+    even in the dark,
+    You shine.
+
+    The night
+    cannot hide me
+    from Your light.
+
+    I am found,
+    I am loved,
+    in Your presence.
+
+    Amen.
+
+cta:
+  text: "Follow @livepraybible"
+  duration: 1.6
+  fade: 0.4
+
+music:
+  folder: "/Users/tom-new/livepraybiblenow/.claude/worktrees/unruffled-swanson-24a9fd/background music"
+  volume: 0.18
+
+output_dir: output/p1_night_shines
