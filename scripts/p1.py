@@ -375,8 +375,11 @@ def main() -> int:
                     help="shorthand for --publish --watch (one-shot)")
     args = ap.parse_args()
 
-    prayer  = read_text(args.prayer_file) or args.prayer
-    caption = read_text(args.caption_file) or args.caption
+    # Pass both inline and --file values through read_text() so the
+    # `\n → newline` substitution applies in both cases. Previously,
+    # inline --prayer / --caption fell straight through with literal \n.
+    prayer  = read_text(args.prayer_file) or read_text(args.prayer)
+    caption = read_text(args.caption_file) or read_text(args.caption)
     if not prayer:
         sys.exit("✗ --prayer / --prayer-file is required")
     if not caption:
