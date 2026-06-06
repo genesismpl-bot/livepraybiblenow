@@ -1,0 +1,142 @@
+# Pillar 6 starter set — 14 days of "Today's verse" reels.
+#
+# Each entry produces one configs/p6_<slug>.yaml + one
+# scripts/captions/p6_<slug>.txt via:
+#
+#   scripts/p6_batch.py
+#
+# Field shape:
+#   slug:   short kebab key, becomes p6_<slug>.yaml
+#   verse:  the verse, as it should appear on screen (1-3 short lines).
+#           Use real newlines — the batch tool preserves them.
+#   ref:    "Book Chap:Verse"  (em-dash is added automatically)
+#   apply:  the one-sentence application line shown below the verse
+#   theme:  a single tag word used for the caption hashtag picker
+#           (anxiety / hope / strength / peace / love / faith /
+#            trust / praise / rest / guidance / forgiveness /
+#            joy / courage / grace)
+#
+# Curated for a mix of comfort + action + identity verses. The
+# application lines are written in second-person present tense — the
+# caption hook then re-frames the same verse in first-person so the
+# pair feels like a conversation between God and the viewer.
+
+verses:
+  - slug:  shepherd
+    verse: |
+      The Lord is my shepherd;
+      I shall not want.
+    ref:   "Psalm 23:1"
+    apply: "Walk into today with nothing to fear."
+    theme: peace
+
+  - slug:  be_still
+    verse: |
+      Be still,
+      and know that I am God.
+    ref:   "Psalm 46:10"
+    apply: "Stop running. He is already here."
+    theme: peace
+
+  - slug:  strength
+    verse: |
+      I can do all things
+      through Christ
+      who strengthens me.
+    ref:   "Philippians 4:13"
+    apply: "You will not run out of strength today."
+    theme: strength
+
+  - slug:  cast_anxiety
+    verse: |
+      Cast all your anxiety on Him,
+      because He cares for you.
+    ref:   "1 Peter 5:7"
+    apply: "Put it down. He is strong enough to hold it."
+    theme: anxiety
+
+  - slug:  fearfully_made
+    verse: |
+      I am fearfully
+      and wonderfully made.
+    ref:   "Psalm 139:14"
+    apply: "You are not an accident. You are art."
+    theme: love
+
+  - slug:  light_of_world
+    verse: |
+      I am the light
+      of the world.
+    ref:   "John 8:12"
+    apply: "Walk toward Him and the shadows lose their voice."
+    theme: hope
+
+  - slug:  plans_for_you
+    verse: |
+      For I know the plans
+      I have for you,
+      plans to give you hope
+      and a future.
+    ref:   "Jeremiah 29:11"
+    apply: "He has not forgotten what He started in you."
+    theme: hope
+
+  - slug:  new_mercies
+    verse: |
+      His mercies are new
+      every morning.
+    ref:   "Lamentations 3:23"
+    apply: "Yesterday does not get to write today."
+    theme: grace
+
+  - slug:  perfect_love
+    verse: |
+      Perfect love
+      casts out fear.
+    ref:   "1 John 4:18"
+    apply: "You are loved by the One who has nothing left to prove."
+    theme: love
+
+  - slug:  delight
+    verse: |
+      Delight yourself in the Lord
+      and He will give you
+      the desires of your heart.
+    ref:   "Psalm 37:4"
+    apply: "Want Him first. The rest will follow."
+    theme: faith
+
+  - slug:  wait_on_him
+    verse: |
+      Those who wait on the Lord
+      shall renew their strength.
+    ref:   "Isaiah 40:31"
+    apply: "Waiting is not wasted. It is being prepared."
+    theme: rest
+
+  - slug:  rest_for_souls
+    verse: |
+      Come to me,
+      all who are weary,
+      and I will give you rest.
+    ref:   "Matthew 11:28"
+    apply: "Put the day down at His feet before you carry it again."
+    theme: rest
+
+  - slug:  good_works
+    verse: |
+      We are His workmanship,
+      created for good works.
+    ref:   "Ephesians 2:10"
+    apply: "You were made on purpose, for a purpose."
+    theme: courage
+
+  - slug:  trust_in_him
+    verse: |
+      Trust in the Lord
+      with all your heart,
+      and lean not
+      on your own understanding.
+    ref:   "Proverbs 3:5"
+    apply: "You don't have to see the path to start walking."
+    theme: trust
