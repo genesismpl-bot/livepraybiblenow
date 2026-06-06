@@ -245,10 +245,13 @@ def build_reel(cfg: dict, raw: Path, work: Path) -> Path:
 
     music_cfg = cfg.get("music") or {}
     music = music_cfg.get("path")
+    # When the config asks for source audio, skip music rotation entirely.
+    if cfg.get("audio") == "from_source":
+        music = None
     # Folder rotation: if no explicit path, pick a deterministic track from
     # `music.folder` keyed on hash(slug). Same slug → same track always
     # (reproducible); different slugs spread evenly across the folder.
-    if not music and music_cfg.get("folder"):
+    elif not music and music_cfg.get("folder"):
         import hashlib
         folder = Path(music_cfg["folder"]).expanduser()
         if folder.exists():
@@ -332,6 +335,22 @@ def build_reel(cfg: dict, raw: Path, work: Path) -> Path:
         args += music_in + ["-filter_complex",
                  f"[0:v]{vf}[v];{afilter}",
                  "-map", "[v]", "-map", "[a]", "-shortest"]
+    elif cfg.get("audio") == "from_source":
+        # Use the source clip's own audio, slowed (atempo = 1/factor) to
+        # match the video's setpts slowdown so the two stay in sync.
+        # Single atempo supports 0.5..100, covering up to a 2x slowdown
+        # (factor ≤ 2). Beyond that the audio will desync slightly.
+        raw_dur = get_duration(str(raw))
+        factor = max(1.0, dur / raw_dur) if raw_dur else 1.0
+        tempo  = max(0.5, 1.0 / factor)
+        src_vol = float((cfg.get("source_audio") or {}).get("volume", 1.0))
+        afilter = (
+            f"[0:a]atempo={tempo:.4f},volume={src_vol}"
+            f",afade=t=out:st={dur-1.5:.2f}:d=1.5[a]"
+        )
+        args += ["-filter_complex", f"[0:v]{vf}[v];{afilter}",
+                 "-map", "[v]", "-map", "[a]", "-shortest"]
+        print(f"  audio: from source (atempo={tempo:.3f}, volume={src_vol})")
     else:
         args += ["-vf", vf, "-an"]
     args += ["-t", f"{dur:.2f}", "-c:v", "libx264", "-pix_fmt", "yuv420p",
