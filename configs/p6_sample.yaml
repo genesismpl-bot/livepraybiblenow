@@ -1,0 +1,75 @@
+# Pillar 6 — "Today's verse" daily anchor (reference / schema spec).
+#
+# P6 is the consistency engine: ONE verse, ONE application line, 15s,
+# same visual identity every day, posted at the same time. This is the
+# pillar that trains both the IG algorithm (consistency signal) and the
+# audience ("I get my verse from them"). Highest production efficiency
+# per render — once the locked background is set, generating 30 of
+# these is one batch.
+#
+# Visual identity (LOCKED across every P6 reel):
+#   - same background video (calm worship-themed motion — sky, water,
+#     candle, wheat field). Pick one and stick with it for 30+ days.
+#   - same serif font, same size, same vertical centering.
+#   - top tag: "TODAY'S VERSE"  (small, top-center, faint)
+#   - middle:  the verse text
+#   - under:   the reference (em-dash prefix, slightly smaller)
+#   - bottom:  the application line (one sentence)
+#   - end-card CTA: "Save • Follow @livepraybible" (save first, per
+#     the algorithmic-weight argument — saves > follows for cold-start).
+#
+# Generate a real P6 config with:
+#   scripts/p6.py PSALM_23_1 \
+#     --verse "The Lord is my shepherd; I shall not want." \
+#     --ref   "Psalm 23:1" \
+#     --apply "Walk into today with nothing to fear."
+#
+# Or batch-generate 14 days at once from scripts/p6_verses.yaml:
+#   scripts/p6_batch.py
+
+slug: p6_sample
+
+background:
+  type: video
+  # Swap this ONCE to your chosen locked P6 background, then leave it.
+  # Convention: upload as "background videos/daily_verse_bg.mp4" in R2.
+  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg.mp4
+
+duration: 15
+darken: 0.42         # slightly deeper than P1 so white text reads cleanly
+
+text:
+  font: serif
+  size: 58
+  align: center
+  position: center
+  color: white
+  # Layout convention — keep the four-block shape every day:
+  #   TODAY'S VERSE         (tag, small)
+  #
+  #   <verse, 1-3 lines>    (main payload)
+  #
+  #   — <reference>         (em-dash + book chap:verse)
+  #
+  #   <application line>    (one short sentence)
+  lines: |
+    TODAY'S VERSE
+
+    The Lord is my shepherd;
+    I shall not want.
+
+    — Psalm 23:1
+
+    Walk into today
+    with nothing to fear.
+
+cta:
+  text: "Save • Follow @livepraybible"
+  duration: 1.8
+  fade: 0.5
+
+# No music block by default — when posting through the Graph API,
+# attach an IG-trending audio in-app for the audio-graph distribution
+# lever. Custom MP3 is allowed if you really want it for one variant.
+
+output_dir: output/p6_sample
