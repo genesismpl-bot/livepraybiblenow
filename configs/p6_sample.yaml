@@ -31,9 +31,15 @@ slug: p6_sample
 
 background:
   type: video
-  # Swap this ONCE to your chosen locked P6 background, then leave it.
-  # Convention: upload as "background videos/daily_verse_bg.mp4" in R2.
-  video: https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg.mp4
+  # ROTATION SET — 3 calm, branded-together clips. The pipeline picks one
+  # per reel via hash(slug) % len(list), so the same slug always renders
+  # against the same clip (reproducible) and the 14 starter configs
+  # spread evenly across the set. To grow/shrink the set, edit the list
+  # in scripts/p6.py (LOCKED_BG_ROTATION) and re-run `scripts/p6.py --batch`.
+  video:
+    - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg.mp4
+    - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_02.mp4
+    - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_03.mp4
 
 duration: 15
 darken: 0.42         # slightly deeper than P1 so white text reads cleanly
