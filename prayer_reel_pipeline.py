@@ -141,15 +141,19 @@ def resolve_background(cfg: dict, work: Path) -> Path:
     btype = bg["type"]
     if btype == "video":
         v = bg["video"]
-        # Rotation: when `video:` is a list, pick one deterministically
-        # via hash(slug) — same slug always lands on the same clip
-        # (reproducible across local + CI), different slugs spread evenly.
-        # This is the P6 "branded set" pattern: 3-5 calm clips that
-        # together form the visual identity, no two consecutive posts
-        # using the same one.
+        # Rotation: when `video:` is a list, pick one of the URLs.
+        # If `background.rotation_index` is set, use it (batch generators
+        # use this to round-robin across posts so no two consecutive
+        # renders share a background). Otherwise fall back to a slug
+        # hash — same slug always lands on the same clip, different
+        # slugs spread evenly.
         if isinstance(v, list) and v:
-            import hashlib
-            idx = int(hashlib.md5(cfg["slug"].encode()).hexdigest(), 16) % len(v)
+            explicit = bg.get("rotation_index")
+            if explicit is not None:
+                idx = int(explicit) % len(v)
+            else:
+                import hashlib
+                idx = int(hashlib.md5(cfg["slug"].encode()).hexdigest(), 16) % len(v)
             print(f"  background (rotation {idx + 1}/{len(v)}): {v[idx]}")
             v = v[idx]
         # Support http(s) URLs — download once into the work dir and cache.
