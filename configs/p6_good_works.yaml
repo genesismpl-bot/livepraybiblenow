@@ -7,6 +7,8 @@ background:
     - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg.mp4
     - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_02.mp4
     - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_03.mp4
+    - https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_04.mp4
+  rotation_index: 0
 
 duration: 15
 darken: 0.42

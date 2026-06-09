@@ -77,6 +77,7 @@ LOCKED_BG_ROTATION = [
     "https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg.mp4",
     "https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_02.mp4",
     "https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_03.mp4",
+    "https://pub-009ad35726e64a38930ccc6e3aff0a81.r2.dev/background%20videos/daily_verse_bg_04.mp4",
 ]
 LOCKED_BG = LOCKED_BG_ROTATION[0]  # back-compat for the single-arg path
 
@@ -168,15 +169,18 @@ def build_caption(verse: str, ref: str, apply_line: str, theme: str) -> str:
 
 
 def write_config(slug: str, verse: str, ref: str, apply_line: str,
-                 background, duration: int, darken: float) -> Path:
+                 background, duration: int, darken: float,
+                 rotation_index: int | None = None) -> Path:
     cfg_path = REPO_ROOT / "configs" / f"p6_{slug}.yaml"
     lines = build_lines(verse, ref, apply_line)
     indented = "\n".join("    " + ln for ln in lines.rstrip("\n").split("\n"))
     # background can be a single URL string OR a list (rotation set).
-    # When list, pipeline picks one deterministically via hash(slug).
+    # When list: pipeline picks via rotation_index if set, else hash(slug).
     if isinstance(background, list):
         bg_yaml = "\n".join(f"    - {url}" for url in background)
         bg_block = f"  video:\n{bg_yaml}\n"
+        if rotation_index is not None:
+            bg_block += f"  rotation_index: {rotation_index}\n"
     else:
         bg_block = f"  video: {background}\n"
     cfg_path.write_text(
@@ -224,6 +228,11 @@ def do_batch(background: str, duration: int, darken: float) -> int:
     entries = data.get("verses") or []
     if not entries:
         sys.exit(f"✗ no `verses:` entries in {VERSES_YML.name}")
+    # Round-robin assignment per verses.yaml position. Guarantees
+    # no two consecutive posts share a background, and distributes
+    # 14 reels across N backgrounds as evenly as possible.
+    is_list = isinstance(background, list)
+    n_bg = len(background) if is_list else 1
     print(f"=== p6 batch: {len(entries)} configs ===\n")
     for i, e in enumerate(entries, 1):
         slug  = e["slug"]
@@ -231,9 +240,12 @@ def do_batch(background: str, duration: int, darken: float) -> int:
         ref   = e["ref"]
         apply_= e["apply"]
         theme = e.get("theme", "faith")
-        cfg   = write_config(slug, verse, ref, apply_, background, duration, darken)
+        rot   = (i - 1) % n_bg if is_list else None
+        cfg   = write_config(slug, verse, ref, apply_, background, duration, darken,
+                             rotation_index=rot)
         cap   = write_caption(slug, verse, ref, apply_, theme)
-        print(f"  [{i:02d}/{len(entries)}] p6_{slug}")
+        bg_tag = f"  → bg {rot + 1}/{n_bg}" if rot is not None else ""
+        print(f"  [{i:02d}/{len(entries)}] p6_{slug}{bg_tag}")
         print(f"        {cfg.relative_to(REPO_ROOT)}")
         print(f"        {cap.relative_to(REPO_ROOT)}")
     print(f"\n✓ wrote {len(entries)} configs + {len(entries)} captions")
