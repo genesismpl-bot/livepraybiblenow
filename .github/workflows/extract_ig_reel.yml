@@ -19,6 +19,13 @@ on:
         description: "Target filename (no spaces, no extension — e.g. snowboard_sunset)"
         type: string
         required: true
+      folder:
+        description: "R2 folder for the clip"
+        type: choice
+        default: "background videos"
+        options:
+          - "background videos"
+          - "hooks"
 
 permissions:
   contents: read
@@ -86,19 +93,20 @@ jobs:
             -show_entries format=duration \
             -of default=noprint_wrappers=1 "$OUT"
 
-      - name: Upload to R2 'background videos/' folder
+      - name: Upload to R2
         id: upload
         shell: bash
         run: |
           set -eo pipefail
           NAME="${{ inputs.filename }}"
           OUT="${{ steps.dl.outputs.out }}"
+          FOLDER="${{ inputs.folder }}"
           # Use .mp4 in the R2 key regardless of yt-dlp's source format.
-          KEY="background videos/${NAME}.mp4"
+          KEY="${FOLDER}/${NAME}.mp4"
           rclone copyto --s3-no-check-bucket --no-update-modtime --s3-no-head \
             "$OUT" "r2up:${R2_BUCKET}/${KEY}"
           # Construct the public URL with URL-encoded folder name.
-          URL="${R2_PUBLIC_BASE_URL%/}/background%20videos/${NAME}.mp4"
+          URL="${R2_PUBLIC_BASE_URL%/}/${FOLDER// /%20}/${NAME}.mp4"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "public URL: $URL"
 
@@ -119,7 +127,7 @@ jobs:
             echo "### Extracted IG reel → R2"
             echo ""
             echo "- **Source:** ${{ inputs.url }}"
-            echo "- **R2 key:** \`background videos/${{ inputs.filename }}.mp4\`"
+            echo "- **R2 key:** \`${{ inputs.folder }}/${{ inputs.filename }}.mp4\`"
             echo "- **Public URL:** ${{ steps.upload.outputs.url }}"
             echo ""
             echo "Paste this into a Pillar 1 config:"
