@@ -3,7 +3,7 @@
 
 End-to-end: extracts an IG reel as background → uploads to R2 →
 writes config + caption → commits + merges to main → optionally
-renders and publishes to @livepraybible.
+renders and publishes to @livepraybiblelove.
 
 Examples
 --------
@@ -240,7 +240,7 @@ text:
 {prayer_indented}
 
 cta:
-  text: "Follow @livepraybible"
+  text: "Follow @livepraybiblelove"
   duration: 1.6
   fade: 0.4
 {music_block}

@@ -7,7 +7,7 @@ this builds the *winning* @pray / @bondandseek style:
 
   moving cinematic video background  (real motion, not a still+zoom)
   + clean STATIC prayer / verse text  (white sans OR elegant serif)
-  + fade-in "Follow @livepraybible" end card
+  + fade-in "Follow @livepraybiblelove" end card
   NO viral hook, NO bottom watermark, NO Gregorian chant, NO gold emphasis.
 
 Background sources (config `background.type`):

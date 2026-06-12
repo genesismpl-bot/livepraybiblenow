@@ -1,6 +1,6 @@
 # livepraybiblenow
 
-Automated short-form video pipeline for `@livepraybible` — bible / prayer
+Automated short-form video pipeline for `@livepraybiblelove` — bible / prayer
 content on Instagram first, multi-platform later.
 
 ## Structure
@@ -11,7 +11,7 @@ Every video is two segments concatenated:
   drop), trimmed verbatim. Used to stop the scroll.
 - **Segment 2 — Payload.** Original bible content: ElevenLabs voiceover
   over a Ken-Burns still, with white captions and gold emphasis on
-  marked `*words*`. Ends with a CTA card pointing at `@livepraybible`.
+  marked `*words*`. Ends with a CTA card pointing at `@livepraybiblelove`.
 
 This pipeline is adapted from the parent **MMO new framework** at
 `/Users/tom-new/My Drive/MMO new framework`. Segment 2 content is the
@@ -58,7 +58,7 @@ The pipeline writes intermediates and `final.mp4` into `output/<slug>/`.
 - [x] Repo created, framework imported.
 - [ ] Pick a Segment 1 hook clip library (reuse from MMO, or fresh).
 - [ ] Scripture API decision (bible-api.com / ESV API / api.bible).
-- [ ] Confirm `@livepraybible` Instagram handle is available.
+- [ ] Confirm `@livepraybiblelove` Instagram handle is available.
 - [ ] First end-to-end render.
 - [ ] Instagram posting automation (Graph API).
 - [ ] Multi-platform publish abstraction.
