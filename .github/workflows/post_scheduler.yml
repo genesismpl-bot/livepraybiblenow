@@ -44,7 +44,7 @@ jobs:
         run: |
           if [[ -n "$(git status --porcelain configs/post_queue.yaml)" ]]; then
             git config user.name  "livepraybible-bot"
-            git config user.email "bot@livepraybible.local"
+            git config user.email "bot@livepraybiblelove.local"
             git add configs/post_queue.yaml
             git commit -m "scheduler: mark due posts (auto)"
             git push
