@@ -118,28 +118,22 @@ def load_config(path: Path, no_hook: bool = False) -> dict[str, Any]:
     return cfg
 
 
-# ──────────────────────────────────────────────────────────────────────
-# Stage 1: trim Segment 1 from source MP4 (re-encoded to canonical recipe)
-# ──────────────────────────────────────────────────────────────────────
+def resolve_media_source(raw_src, work: Path, cache_name: str) -> Path:
+    """Resolve a config media path to a local file.
 
-def trim_hook(cfg: dict, work: Path) -> Path:
-    out = work / "hook.mp4"
-    if out.exists():
-        print(f"  hook.mp4 exists ({get_duration(str(out)):.2f}s), skipping")
-        return out
-
-    raw_src = cfg["hook"]["source"]
-    # Support http(s) URLs — download once into the work dir and cache.
-    # Mirrors the pattern in prayer_reel_pipeline.py:resolve_background()
-    # for background.video. Lets configs point at R2-hosted hook clips
-    # (r2://livepraybible/hooks/<ig-shortcode>.mp4) instead of needing the
-    # file present per-machine.
+    Supports http(s) URLs — downloaded once into the work dir and cached
+    under ``cache_name`` — or local paths (``~`` and repo-relative ok).
+    Lets configs point at R2-hosted clips
+    (r2://livepraybible/hooks/<ig-shortcode>.mp4) instead of needing the
+    file present per-machine. Used by both the hook source and the
+    payload background_video.
+    """
     if isinstance(raw_src, str) and raw_src.startswith(("http://", "https://")):
-        src = work / "hook_source.mp4"
+        src = work / cache_name
         if not src.exists():
             import requests
             src.parent.mkdir(parents=True, exist_ok=True)
-            print(f"  downloading hook source: {raw_src}")
+            print(f"  downloading: {raw_src}")
             # Use a real UA — Cloudflare R2.dev returns 403 for the default
             # python-urllib/python-requests UAs.
             r = requests.get(
@@ -152,10 +146,26 @@ def trim_hook(cfg: dict, work: Path) -> Path:
                 for chunk in r.iter_content(64 * 1024):
                     if chunk:
                         f.write(chunk)
-    else:
-        src = Path(raw_src).expanduser()
-        if not src.exists():
-            raise FileNotFoundError(f"hook source not found: {src}")
+        return src
+    src = Path(raw_src).expanduser()
+    if not src.is_absolute():
+        src = ROOT / src
+    return src
+
+
+# ──────────────────────────────────────────────────────────────────────
+# Stage 1: trim Segment 1 from source MP4 (re-encoded to canonical recipe)
+# ──────────────────────────────────────────────────────────────────────
+
+def trim_hook(cfg: dict, work: Path) -> Path:
+    out = work / "hook.mp4"
+    if out.exists():
+        print(f"  hook.mp4 exists ({get_duration(str(out)):.2f}s), skipping")
+        return out
+
+    src = resolve_media_source(cfg["hook"]["source"], work, "hook_source.mp4")
+    if not src.exists():
+        raise FileNotFoundError(f"hook source not found: {src}")
 
     start = float(cfg["hook"]["start"])
     end = float(cfg["hook"]["end"])
@@ -314,9 +324,7 @@ def animate_still(still: Path, audio: Path, cfg: dict, work: Path) -> Path:
     # still. The clip's own motion replaces the Ken-Burns zoom.
     bg_video = cfg.get("background_video")
     if bg_video:
-        src = Path(bg_video).expanduser()
-        if not src.is_absolute():
-            src = ROOT / src
+        src = resolve_media_source(bg_video, work, "background_video.mp4")
         if not src.exists():
             raise FileNotFoundError(f"background_video not found: {src}")
         run_ffmpeg([
