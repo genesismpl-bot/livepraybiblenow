@@ -6,8 +6,7 @@ boots with the same project context. Update it when key decisions change.
 ## What this project is
 
 Automated short-form video pipeline for the Instagram account
-**@livepraybiblelove** (was `@livepraybible` until 2026-06-12) — bible /
-prayer content. Instagram is the first
+**@livepraybiblelove** — bible / prayer content. Instagram is the first
 target; TikTok, YouTube Shorts, X follow later behind a platform-agnostic
 publishing abstraction.
 
@@ -83,15 +82,17 @@ the format. Useful files there:
 | Decision | Choice |
 | --- | --- |
 | First platform | Instagram |
-| CTA handle | `@livepraybiblelove` (switched 2026-06-12 from `@livepraybible`; NOT `@livepraybiblenow` — repo name differs) |
+| CTA handle | `@livepraybiblelove` (NOT `@livepraybiblenow` — repo name differs). **Switched from `@livepraybible` 2026-06-12** — the first 4 P6 reels live on the old account; everything from #5 onward posts to the new one. The switch is done via the `IG_USER_ID` + `INSTAGRAM_LONG_LIVED_TOKEN` GitHub secrets — the repo never hardcodes the account id. |
 | Code relationship to MMO framework | Import / vendor — don't fork, don't depend on Drive path |
 | Segment 2 content source | **Scripture API** (specific provider TBD) |
 | Brand opener for Segment 2 | Locked. Every script starts with `Stop *doomscrolling*.` + one of three pivots (random distribution): A `Have you *prayed* today?` / B `When's the last time you *prayed*?` / C `Talk to *God* instead.` See `scripts/segment2_shortlist_v1.md`. |
 
 ## Open items
 
-- [ ] Confirm `@livepraybible` Instagram handle availability (automated
-      check was blocked by IG; needs manual verification).
+- [ ] Mint credentials for `@livepraybiblelove` (Business/Creator account
+      + Instagram-Login long-lived token) and update the `IG_USER_ID` +
+      `INSTAGRAM_LONG_LIVED_TOKEN` GitHub Actions secrets. Until then,
+      publish workflows still post to the OLD account.
 - [ ] Choose scripture API: `bible-api.com` (free, public-domain only),
       ESV API (free w/ key, rate-limited), or `api.bible` (broader).
 - [ ] Pick Segment 1 hook clip source — reuse from MMO outputs (cross-

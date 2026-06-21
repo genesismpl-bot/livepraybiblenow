@@ -163,7 +163,7 @@ def build_caption(verse: str, ref: str, apply_line: str, theme: str) -> str:
         f"\"{verse_flat}\" — {ref_clean}\n\n"
         f"{apply_line.strip()}\n\n"
         f"🔖 {save_cta}\n"
-        f"🙏 Follow @livepraybible for today's verse, every morning.\n\n"
+        f"🙏 Follow @livepraybiblelove for today's verse, every morning.\n\n"
         f"{tags}\n"
     )
 
@@ -204,7 +204,7 @@ def write_config(slug: str, verse: str, ref: str, apply_line: str,
         f"{indented}\n"
         f"\n"
         f"cta:\n"
-        f"  text: \"Save • Follow @livepraybible\"\n"
+        f"  text: \"Save • Follow @livepraybiblelove\"\n"
         f"  duration: 1.8\n"
         f"  fade: 0.5\n"
         f"\n"

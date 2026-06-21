@@ -4,7 +4,7 @@ name: Render + publish reel
 #   pipeline + config + committed caption_file
 #     → render in CI
 #     → upload final.mp4 to R2
-#     → post the Reel to @livepraybible via the Graph API
+#     → post the Reel to @livepraybiblelove via the Graph API
 #
 # This is the "0 local machine" entry point. For scheduled (non-immediate)
 # posts, commit a row to configs/post_queue.yaml — the post_scheduler.yml

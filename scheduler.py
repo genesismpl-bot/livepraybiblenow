@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Process the @livepraybible Instagram post queue.
+"""Process the @livepraybiblelove Instagram post queue.
 
 Reads `configs/post_queue.yaml`, finds rows whose `status: queued` and
 `scheduled_at` is in the past, uploads the video to R2, posts to

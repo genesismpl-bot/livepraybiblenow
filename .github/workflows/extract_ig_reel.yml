@@ -6,7 +6,7 @@ name: Extract IG reel → R2
 #
 # This removes the last local step from the autonomous loop: combined
 # with render_and_publish.yml, you can go from "saw a cool reel" to
-# "live on @livepraybible" without touching your Mac.
+# "live on @livepraybiblelove" without touching your Mac.
 
 on:
   workflow_dispatch:
