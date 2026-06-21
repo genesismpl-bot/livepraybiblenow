@@ -15,7 +15,7 @@
 #   - middle:  the verse text
 #   - under:   the reference (em-dash prefix, slightly smaller)
 #   - bottom:  the application line (one sentence)
-#   - end-card CTA: "Save • Follow @livepraybible" (save first, per
+#   - end-card CTA: "Save • Follow @livepraybiblelove" (save first, per
 #     the algorithmic-weight argument — saves > follows for cold-start).
 #
 # Generate a real P6 config with:
@@ -71,7 +71,7 @@ text:
     with nothing to fear.
 
 cta:
-  text: "Save • Follow @livepraybible"
+  text: "Save • Follow @livepraybiblelove"
   duration: 1.8
   fade: 0.5
 

@@ -73,7 +73,7 @@ captions:
 # y_frac places the CTA in the lower-third (same zone as the captions, but
 # the captions are gone by the time the CTA fades in).
 cta:
-  text:     "Follow @livepraybible for daily verses"
+  text:     "Follow @livepraybiblelove for daily verses"
   duration: 1.5
   fade_in:  0.4
   y_frac:   0.78

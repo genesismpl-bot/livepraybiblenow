@@ -57,7 +57,7 @@ captions:
 
 # ── End-card CTA ─────────────────────────────────────────────────────
 cta:
-  text:     "Follow @livepraybible for daily prayer"
+  text:     "Follow @livepraybiblelove for daily prayer"
   duration: 1.5
   fade_in:  0.4
   y_frac:   0.78

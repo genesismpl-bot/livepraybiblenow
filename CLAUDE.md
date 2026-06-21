@@ -6,7 +6,8 @@ boots with the same project context. Update it when key decisions change.
 ## What this project is
 
 Automated short-form video pipeline for the Instagram account
-**@livepraybible** — bible / prayer content. Instagram is the first
+**@livepraybiblelove** (was `@livepraybible` until 2026-06-12) — bible /
+prayer content. Instagram is the first
 target; TikTok, YouTube Shorts, X follow later behind a platform-agnostic
 publishing abstraction.
 
@@ -30,7 +31,7 @@ Every video is two clips concatenated:
   - Burnt-in ASS captions, white `#FFFFFF` with gold `#FFD700`
     emphasis on `*marked*` words.
   - End-card CTA drawtext overlay fading in over the last ~1.5s
-    pointing at `@livepraybible`.
+    pointing at `@livepraybiblelove`.
 
 The pipeline lives in `hook_pivot_pipeline.py` and runs 7 stages:
 `trim hook → choose still → ElevenLabs VO + word timestamps →
@@ -82,7 +83,7 @@ the format. Useful files there:
 | Decision | Choice |
 | --- | --- |
 | First platform | Instagram |
-| CTA handle | `@livepraybible` (NOT `@livepraybiblenow` — repo name differs) |
+| CTA handle | `@livepraybiblelove` (switched 2026-06-12 from `@livepraybible`; NOT `@livepraybiblenow` — repo name differs) |
 | Code relationship to MMO framework | Import / vendor — don't fork, don't depend on Drive path |
 | Segment 2 content source | **Scripture API** (specific provider TBD) |
 | Brand opener for Segment 2 | Locked. Every script starts with `Stop *doomscrolling*.` + one of three pivots (random distribution): A `Have you *prayed* today?` / B `When's the last time you *prayed*?` / C `Talk to *God* instead.` See `scripts/segment2_shortlist_v1.md`. |
